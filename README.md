@@ -38,4 +38,4 @@ To write custom bots you can:
 
 ## Credits
 
-Erfan Alimohammadi and Amir Reza Shahmiri
+[Erfan Alimohammadi](https://github.com/Erfaniaa) and [Amir Reza Shahmiri](https://github.com/Amirrezashahmiri)
