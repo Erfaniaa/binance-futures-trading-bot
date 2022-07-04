@@ -27,8 +27,8 @@ To write custom bots you can:
 
 - Define new indicators in `indicators.py`.
 
-- Define a new strategy in `main.py` (especially inside is_it_time_to_open_long_position and is_it_time_to_open_short_position functions).
-- Config your bot settings in config.py.
+- Define a new strategy in `main.py` (especially inside `is_it_time_to_open_long_position` and `is_it_time_to_open_short_position` functions).
+- Config your bot settings in `config.py`.
 
 ## To-do
 
