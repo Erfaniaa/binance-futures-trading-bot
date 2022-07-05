@@ -665,7 +665,7 @@ def set_position_mode(hedge_mode):
 
 def open_long_position(contract_symbol, first_coin_amount, take_profit_percent, stop_loss_percent, strategy_id):	
 	print("=" * 60)
-	print("open_long_position")
+	print("open_long_position for strategy #" + str(strategy_id))
 	market_order_created = False
 	position_quantity = round_down(WALLET_USAGE_PERCENT / 100 / STRATEGIES_COUNT * first_coin_amount / contract_last_price, POSITION_QUANTITY_DECIMAL_DIGITS)
 	if position_quantity < 10 ** (-POSITION_QUANTITY_DECIMAL_DIGITS):
@@ -737,7 +737,7 @@ def open_long_position(contract_symbol, first_coin_amount, take_profit_percent, 
 
 def open_short_position(contract_symbol, first_coin_amount, take_profit_percent, stop_loss_percent, strategy_id):	
 	print("=" * 60)
-	print("open_short_position")
+	print("open_short_position for strategy #" + str(strategy_id))
 	market_order_created = False
 	position_quantity = round_down(WALLET_USAGE_PERCENT / 100 / STRATEGIES_COUNT * first_coin_amount / contract_last_price, POSITION_QUANTITY_DECIMAL_DIGITS)
 	if position_quantity < 10 ** (-POSITION_QUANTITY_DECIMAL_DIGITS):
