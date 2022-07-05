@@ -7,6 +7,8 @@ Easy-to-use multi-strategy automatic trading for Binance Futures
 - You can run it fast and it's easy to use.
 - This project can handle multiple strategies at the same time.
 - There are no complexities and no database usage in this project.
+- It's easy for modifying and customization.
+- You can read the code for educational purposes.
 
 ## Run
 
