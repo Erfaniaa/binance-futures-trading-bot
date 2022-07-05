@@ -35,6 +35,7 @@ To write custom bots you can:
 - Import modules, not variables.
 - Use classes and make `main.py` smaller.
 - Add more indicators to `indicators.py`.
+- Find a better way for handling error codes.
 
 ## Credits
 
