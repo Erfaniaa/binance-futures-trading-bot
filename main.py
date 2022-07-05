@@ -623,8 +623,12 @@ def is_it_time_to_open_short_position(strategy_id, current_time):
 	return False
 
 
-def is_it_time_to_update(current_time):
+def is_it_time_to_update_and_trade(current_time):
 	return int(current_time.minute) == 0 and int(current_time.second) % 60 >= HANDLING_POSITIONS_TIME_SECOND and int(current_time.second) % 60 <= HANDLING_POSITIONS_TIME_SECOND + 1
+
+
+def is_it_time_to_cancel_extra_open_orders(current_time):
+	return int(current_time.minute) % 5 == 0 and int(current_time.second) % 60 >= HANDLING_POSITIONS_TIME_SECOND and int(current_time.second) % 60 <= HANDLING_POSITIONS_TIME_SECOND + 1
 
 
 def cancel_symbol_open_orders(contract_symbol):
@@ -816,7 +820,10 @@ def main():
 	while True:
 		sleep(SLEEP_INTERVAL)
 		update_current_time()
-		if is_it_time_to_update(current_time):
+		if is_it_time_to_cancel_extra_open_orders(current_time):
+			for i in range(STRATEGIES_COUNT):
+				cancel_extra_open_order(CONTRACT_SYMBOL, i)
+		if is_it_time_to_update_and_trade(current_time):
 			load_orders_dict_from_file(ORDERS_DICT_FILENAME)
 			load_indicators_dict_from_file(INDICATORS_DICT_FILENAME)
 			update_indicators_dict(CONTRACT_SYMBOL, current_time, TIMEFRAME)
@@ -850,8 +857,6 @@ def main():
 			print("is_macd_negative:", is_macd_negative)
 			print("indicators_dict:", indicators_dict)
 			print("_" * 60)
-			for i in range(STRATEGIES_COUNT):
-				cancel_extra_open_order(CONTRACT_SYMBOL, i)
 			sleep(4 * SLEEP_INTERVAL)
 			for i in range(STRATEGIES_COUNT):
 				if not is_position_active(CONTRACT_SYMBOL, i):
