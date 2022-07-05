@@ -13,7 +13,7 @@ Easy-to-use multi-strategy automatic trading for Binance Futures
 ## Run
 
 1. Clone the repository.
-2. Generate a Binance API key and put it in credentials.py.
+2. Generate a Binance API key and put it in `credentials.py`.
 3. Run `pip3 install -r requirements.txt`.
 4. Run `python3 init_indicators_dict.py`.
 5. Run `python3 init_orders_dict.py`.
