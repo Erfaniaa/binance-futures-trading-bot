@@ -840,7 +840,7 @@ def main():
 			print("account_available_balance:", account_available_balance, FIRST_COIN_SYMBOL)
 			print("total_account_balance:", total_account_balance, FIRST_COIN_SYMBOL)
 			print("unrealized_profit:", unrealized_profit, FIRST_COIN_SYMBOL)
-			print("last_account_balances_list:", last_account_available_balances_list)
+			print("last_account_available_balances_list:", last_account_available_balances_list)
 			print("last_total_account_balances_list:", last_total_account_balances_list)
 			print("is_price_increasing:", is_price_increasing)
 			print("is_price_decreasing:", is_price_decreasing)
