@@ -552,7 +552,7 @@ def is_take_profit_unexecuted(contract_symbol, strategy_id):
 			if int(order_id) == -1:
 				return (SUCCESSFUL, False)
 			order = binance_futures_api.query_order(symbol=contract_symbol, orderId=order_id, timestamp=get_local_timestamp())
-			if order["status"] != "NEW" and order["executedQty"] == order["origQty"]:
+			if order["status"] == "FILLED":
 				return (SUCCESSFUL, False)
 			else:
 				return (SUCCESSFUL, True)
@@ -569,7 +569,7 @@ def is_stop_loss_unexecuted(contract_symbol, strategy_id):
 			if int(order_id) == -1:
 				return (SUCCESSFUL, False)
 			order = binance_futures_api.query_order(symbol=contract_symbol, orderId=order_id, timestamp=get_local_timestamp())
-			if order["status"] != "NEW" and order["executedQty"] == order["origQty"]:
+			if order["status"] == "FILLED":
 				return (SUCCESSFUL, False)
 			else:
 				return (SUCCESSFUL, True)
