@@ -548,7 +548,7 @@ def update_is_macd_negative():
 def is_take_profit_unexecuted(contract_symbol, strategy_id):
 	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
 		try:
-			order_id = orders_dict["strategy" + str(strategy_id) + "_last_take_profit_order_id"]
+			order_id = orders_dict.get("strategy" + str(strategy_id) + "_last_take_profit_order_id", -1)
 			if int(order_id) == -1:
 				return (SUCCESSFUL, False)
 			order = binance_futures_api.query_order(symbol=contract_symbol, orderId=order_id, timestamp=get_local_timestamp())
@@ -565,7 +565,7 @@ def is_take_profit_unexecuted(contract_symbol, strategy_id):
 def is_stop_loss_unexecuted(contract_symbol, strategy_id):
 	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
 		try:
-			order_id = orders_dict["strategy" + str(strategy_id) + "_last_stop_loss_order_id"]
+			order_id = orders_dict.get("strategy" + str(strategy_id) + "_last_stop_loss_order_id", -1)
 			if int(order_id) == -1:
 				return (SUCCESSFUL, False)
 			order = binance_futures_api.query_order(symbol=contract_symbol, orderId=order_id, timestamp=get_local_timestamp())
