@@ -15,18 +15,18 @@ def get_wma(candles):
 
 
 def get_ma(candles):
-  if len(candles) == 0:
-    return 0
-  rs = 0
-  for item in range(len(candles)):
-        rs += float(candles[item])
-  rs = rs / len(candles)
-  return rs
+	if len(candles) == 0:
+		return 0
+	rs = 0
+	for item in range(len(candles)):
+		rs += float(candles[item])
+	rs = rs / len(candles)
+	return rs
 
 
-def get_new_ema(lastEMA, price, count):
-  m = 2 / (count + 1)
-  price = price
-  s1 = (float(price) * float(m))
-  s2 = float(lastEMA) * float((1 - m))
-  return (s1 + s2)
+def get_new_ema(last_ema, price, count):
+	m = 2 / (count + 1)
+	price = price
+	s1 = (float(price) * float(m))
+	s2 = float(last_ema) * float((1 - m))
+	return s1 + s2
