@@ -26,9 +26,8 @@ This will run an example bot on trading Bitcoin with 4 strategies simultaneously
 To write custom bots you can:
 
 - Set an initial indicators setting in `init_indicators_dict.py` (because we are handling indicators in the client side with pickle files).
-
+- Set an initial orders setting in `init_orders_dict.py` (because we are handling orders in the client side with pickle files).
 - Define new indicators in `indicators.py`.
-
 - Define a new strategy in `main.py` (especially inside `is_it_time_to_open_long_position` and `is_it_time_to_open_short_position` functions).
 - Config your bot settings in `config.py`.
 
