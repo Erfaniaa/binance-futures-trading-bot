@@ -1,1 +1,1 @@
-binance-futures-connector
+binance-futures-connector==1.10.0
