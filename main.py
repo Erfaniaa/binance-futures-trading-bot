@@ -628,7 +628,7 @@ def is_it_time_to_update_and_trade(current_time):
 
 
 def is_it_time_to_cancel_extra_open_orders(current_time):
-	return int(current_time.minute) % 5 == 0 and int(current_time.second) % 60 >= HANDLING_POSITIONS_TIME_SECOND and int(current_time.second) % 60 <= HANDLING_POSITIONS_TIME_SECOND + 1
+	return int(current_time.minute) % 1 == 0 and int(current_time.second) % 60 >= HANDLING_POSITIONS_TIME_SECOND and int(current_time.second) % 60 <= HANDLING_POSITIONS_TIME_SECOND + 1
 
 
 def cancel_symbol_open_orders(contract_symbol):
