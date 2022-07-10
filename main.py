@@ -5,10 +5,9 @@ from indicators import *
 from config import *
 import pickle
 from candle import Candle
-from binance.futures import Futures 
+from binance.futures import Futures
 from credentials import *
 from utils import *
-
 
 is_price_increasing = False
 is_price_decreasing = False
@@ -49,7 +48,8 @@ def get_local_timestamp():
 def convert_binance_data_list_to_candles_list(binance_data_list):
 	candles_list = []
 	for binance_data in binance_data_list:
-		candle = Candle(datetime.fromtimestamp(binance_data[0] // 1000), binance_data[1], binance_data[2], binance_data[3], binance_data[4], None, datetime.fromtimestamp(binance_data[6] // 1000))
+		candle = Candle(datetime.fromtimestamp(binance_data[0] // 1000), binance_data[1], binance_data[2],
+						binance_data[3], binance_data[4], None, datetime.fromtimestamp(binance_data[6] // 1000))
 		candles_list.append(candle)
 	return candles_list
 
@@ -78,12 +78,12 @@ def get_m1_candles(contract_symbol, start_datetime, end_datetime):
 			return (ERROR, [])
 		for m1_candle in current_time_range_m1_candles_list:
 			all_m1_candles_list.append(Candle(datetime.fromtimestamp(m1_candle[0] // 1000),
-									   m1_candle[1],
-									   m1_candle[2],
-									   m1_candle[3],
-									   m1_candle[4],
-									   m1_candle[5],
-									   datetime.fromtimestamp(m1_candle[6] // 1000)))
+											  m1_candle[1],
+											  m1_candle[2],
+											  m1_candle[3],
+											  m1_candle[4],
+											  m1_candle[5],
+											  datetime.fromtimestamp(m1_candle[6] // 1000)))
 	return (SUCCESSFUL, all_m1_candles_list)
 
 
@@ -111,12 +111,12 @@ def get_m15_candles(contract_symbol, start_datetime, end_datetime):
 			return (ERROR, [])
 		for m15_candle in current_time_range_m15_candles_list:
 			all_m15_candles_list.append(Candle(datetime.fromtimestamp(m15_candle[0] // 1000),
-									   m15_candle[1],
-									   m15_candle[2],
-									   m15_candle[3],
-									   m15_candle[4],
-									   m15_candle[5],
-									   datetime.fromtimestamp(m15_candle[6] // 1000)))
+											   m15_candle[1],
+											   m15_candle[2],
+											   m15_candle[3],
+											   m15_candle[4],
+											   m15_candle[5],
+											   datetime.fromtimestamp(m15_candle[6] // 1000)))
 	return (SUCCESSFUL, all_m15_candles_list)
 
 
@@ -144,12 +144,12 @@ def get_h1_candles(contract_symbol, start_datetime, end_datetime):
 			return (ERROR, [])
 		for h1_candle in current_time_range_h1_candles_list:
 			all_h1_candles_list.append(Candle(datetime.fromtimestamp(h1_candle[0] // 1000),
-									   h1_candle[1],
-									   h1_candle[2],
-									   h1_candle[3],
-									   h1_candle[4],
-									   h1_candle[5],
-									   datetime.fromtimestamp(h1_candle[6] // 1000)))
+											  h1_candle[1],
+											  h1_candle[2],
+											  h1_candle[3],
+											  h1_candle[4],
+											  h1_candle[5],
+											  datetime.fromtimestamp(h1_candle[6] // 1000)))
 	return (SUCCESSFUL, all_h1_candles_list)
 
 
@@ -210,12 +210,12 @@ def get_h4_candles(contract_symbol, start_datetime, end_datetime):
 			return (ERROR, [])
 		for h4_candle in current_time_range_h4_candles_list:
 			all_h4_candles_list.append(Candle(datetime.fromtimestamp(h4_candle[0] // 1000),
-									   h4_candle[1],
-									   h4_candle[2],
-									   h4_candle[3],
-									   h4_candle[4],
-									   h4_candle[5],
-									   datetime.fromtimestamp(h4_candle[6] // 1000)))
+											  h4_candle[1],
+											  h4_candle[2],
+											  h4_candle[3],
+											  h4_candle[4],
+											  h4_candle[5],
+											  datetime.fromtimestamp(h4_candle[6] // 1000)))
 	return (SUCCESSFUL, all_h4_candles_list)
 
 
@@ -243,12 +243,12 @@ def get_d1_candles(contract_symbol, start_datetime, end_datetime):
 			return (ERROR, [])
 		for d1_candle in current_time_range_d1_candles_list:
 			all_d1_candles_list.append(Candle(datetime.fromtimestamp(d1_candle[0] // 1000),
-									   d1_candle[1],
-									   d1_candle[2],
-									   d1_candle[3],
-									   d1_candle[4],
-									   d1_candle[5],
-									   datetime.fromtimestamp(d1_candle[6] // 1000)))
+											  d1_candle[1],
+											  d1_candle[2],
+											  d1_candle[3],
+											  d1_candle[4],
+											  d1_candle[5],
+											  datetime.fromtimestamp(d1_candle[6] // 1000)))
 	return (SUCCESSFUL, all_d1_candles_list)
 
 
@@ -333,10 +333,18 @@ def update_recent_prices_list(contract_symbol, current_time, candles_count, time
 		recent_d1_close_prices_list = [float(candle.close) for candle in recent_candles_list]
 
 
-def load_orders_dict_from_file(filename=ORDERS_DICT_FILENAME):
+def load_orders_dict():
 	global orders_dict
+	orders_dict = load_orders_dict_from_file(ORDERS_DICT_FILENAME)
+
+
+def load_orders_dict_from_file(filename=ORDERS_DICT_FILENAME):
 	with open(filename, 'rb') as handle:
-		orders_dict = pickle.load(handle)
+		return pickle.load(handle)
+
+
+def save_orders_dict():
+	save_orders_dict_to_file(ORDERS_DICT_FILENAME)
 
 
 def save_orders_dict_to_file(filename=ORDERS_DICT_FILENAME):
@@ -351,10 +359,19 @@ def update_orders_dict(current_time, key, value):
 	orders_dict[key] = value
 
 
+def load_indicators_dict():
+	global indicators_dict
+	indicators_dict = load_indicators_dict_from_file(INDICATORS_DICT_FILENAME)
+
+
 def load_indicators_dict_from_file(filename=INDICATORS_DICT_FILENAME):
 	global indicators_dict
 	with open(filename, 'rb') as handle:
-		indicators_dict = pickle.load(handle)
+		return pickle.load(handle)
+
+
+def save_indicators_dict():
+	save_indicators_dict_to_file(INDICATORS_DICT_FILENAME)
 
 
 def save_indicators_dict_to_file(filename=INDICATORS_DICT_FILENAME):
@@ -469,18 +486,20 @@ def close_all_open_positions_market_price():
 					continue
 				elif position_quantity > 0.0:
 					binance_futures_api.new_order(symbol=position["symbol"],
-									side="SELL",
-									quantity=abs(position_quantity),
-									type="MARKET",
-									newClientOrderId=NEW_CLIENT_ORDER_ID_PREFIX + str(get_local_timestamp())[-10:],
-									timestamp=get_local_timestamp())
+												  side="SELL",
+												  quantity=abs(position_quantity),
+												  type="MARKET",
+												  newClientOrderId=NEW_CLIENT_ORDER_ID_PREFIX + str(
+													  get_local_timestamp())[-10:],
+												  timestamp=get_local_timestamp())
 				elif position_quantity < 0.0:
 					binance_futures_api.new_order(symbol=position["symbol"],
-									side="BUY",
-									quantity=abs(position_quantity),
-									type="MARKET",
-									newClientOrderId=NEW_CLIENT_ORDER_ID_PREFIX + str(get_local_timestamp())[-10:],
-									timestamp=get_local_timestamp())
+												  side="BUY",
+												  quantity=abs(position_quantity),
+												  type="MARKET",
+												  newClientOrderId=NEW_CLIENT_ORDER_ID_PREFIX + str(
+													  get_local_timestamp())[-10:],
+												  timestamp=get_local_timestamp())
 			return SUCCESSFUL
 		except:
 			pass
@@ -624,11 +643,13 @@ def is_it_time_to_open_short_position(strategy_id, current_time):
 
 
 def is_it_time_to_update_and_trade(current_time):
-	return int(current_time.minute) == 0 and int(current_time.second) % 60 >= HANDLING_POSITIONS_TIME_SECOND and int(current_time.second) % 60 <= HANDLING_POSITIONS_TIME_SECOND + 1
+	return int(current_time.minute) == 0 and HANDLING_POSITIONS_TIME_SECOND <= int(
+		current_time.second) % 60 <= HANDLING_POSITIONS_TIME_SECOND + 1
 
 
 def is_it_time_to_cancel_extra_open_orders(current_time):
-	return int(current_time.minute) % 5 == 0 and int(current_time.second) % 60 >= HANDLING_POSITIONS_TIME_SECOND and int(current_time.second) % 60 <= HANDLING_POSITIONS_TIME_SECOND + 1
+	return int(current_time.minute) % 5 == 0 and HANDLING_POSITIONS_TIME_SECOND <= int(
+		current_time.second) % 60 <= HANDLING_POSITIONS_TIME_SECOND + 1
 
 
 def cancel_symbol_open_orders(contract_symbol):
@@ -811,6 +832,12 @@ def open_short_position(contract_symbol, first_coin_amount, take_profit_percent,
 	return ERROR
 
 
+def check_and_cancel_extra_open_orders():
+	if is_it_time_to_cancel_extra_open_orders(current_time):
+		for i in range(STRATEGIES_COUNT):
+			cancel_extra_open_order(CONTRACT_SYMBOL, i)
+
+
 def main():
 	global is_bot_started
 	init_bot()
@@ -820,52 +847,57 @@ def main():
 	while True:
 		sleep(SLEEP_INTERVAL)
 		update_current_time()
-		if is_it_time_to_cancel_extra_open_orders(current_time):
-			for i in range(STRATEGIES_COUNT):
-				cancel_extra_open_order(CONTRACT_SYMBOL, i)
-		if is_it_time_to_update_and_trade(current_time):
-			load_orders_dict_from_file(ORDERS_DICT_FILENAME)
-			load_indicators_dict_from_file(INDICATORS_DICT_FILENAME)
-			update_indicators_dict(CONTRACT_SYMBOL, current_time, TIMEFRAME)
-			update_current_time()
-			update_recent_prices_list(CONTRACT_SYMBOL, current_time, IMPORTANT_CANDLES_COUNT, TIMEFRAME)
-			save_indicators_dict_to_file(INDICATORS_DICT_FILENAME)
-			update_contract_last_price(CONTRACT_SYMBOL)
-			update_is_price_increasing(PRICE_DIRECTION_INDICATOR_NAME_1, PRICE_DIRECTION_INDICATOR_NAME_2)
-			update_is_price_decreasing(PRICE_DIRECTION_INDICATOR_NAME_1, PRICE_DIRECTION_INDICATOR_NAME_2)
-			update_is_macd_increasing()
-			update_is_macd_decreasing()
-			update_is_macd_positive()
-			update_is_macd_negative()
-			update_account_balance_and_unrealized_profit(FIRST_COIN_SYMBOL)
-			print("_" * 60)
-			print("LEVERAGE:", LEVERAGE)
-			print("CONTRACT_SYMBOL:", CONTRACT_SYMBOL)
-			print("PRICE_DIRECTION_INDICATOR_NAMES:", PRICE_DIRECTION_INDICATOR_NAME_1, PRICE_DIRECTION_INDICATOR_NAME_2)
-			print("current_time:", current_time)
-			print("open_orders_list:", open_orders_list)
-			print("account_available_balance:", account_available_balance, FIRST_COIN_SYMBOL)
-			print("total_account_balance:", total_account_balance, FIRST_COIN_SYMBOL)
-			print("unrealized_profit:", unrealized_profit, FIRST_COIN_SYMBOL)
-			print("last_account_available_balances_list:", last_account_available_balances_list)
-			print("last_total_account_balances_list:", last_total_account_balances_list)
-			print("is_price_increasing:", is_price_increasing)
-			print("is_price_decreasing:", is_price_decreasing)
-			print("is_macd_increasing:", is_macd_increasing)
-			print("is_macd_decreasing:", is_macd_decreasing)
-			print("is_macd_positive:", is_macd_positive)
-			print("is_macd_negative:", is_macd_negative)
-			print("indicators_dict:", indicators_dict)
-			print("_" * 60)
-			sleep(4 * SLEEP_INTERVAL)
-			for i in range(STRATEGIES_COUNT):
-				if not is_position_active(CONTRACT_SYMBOL, i):
-					if is_it_time_to_open_long_position(i, current_time):
-						open_long_position(CONTRACT_SYMBOL, total_account_balance, TAKE_PROFIT_PERCENTS[i], STOP_LOSS_PERCENTS[i], i)
-					elif is_it_time_to_open_short_position(i, current_time):
-						open_short_position(CONTRACT_SYMBOL, total_account_balance, TAKE_PROFIT_PERCENTS[i], STOP_LOSS_PERCENTS[i], i)
-			save_orders_dict_to_file(ORDERS_DICT_FILENAME)
+		check_and_cancel_extra_open_orders()
+		if not is_it_time_to_update_and_trade(current_time):
+			continue
+		load_orders_dict()
+		load_indicators_dict()
+		update_indicators_dict(CONTRACT_SYMBOL, current_time, TIMEFRAME)
+		update_current_time()
+		update_recent_prices_list(CONTRACT_SYMBOL, current_time, IMPORTANT_CANDLES_COUNT, TIMEFRAME)
+		save_indicators_dict()
+		update_contract_last_price(CONTRACT_SYMBOL)
+		update_is_price_increasing(PRICE_DIRECTION_INDICATOR_NAME_1, PRICE_DIRECTION_INDICATOR_NAME_2)
+		update_is_price_decreasing(PRICE_DIRECTION_INDICATOR_NAME_1, PRICE_DIRECTION_INDICATOR_NAME_2)
+		update_is_macd_increasing()
+		update_is_macd_decreasing()
+		update_is_macd_positive()
+		update_is_macd_negative()
+		update_account_balance_and_unrealized_profit(FIRST_COIN_SYMBOL)
+		log_results()
+		sleep(4 * SLEEP_INTERVAL)
+		for i in range(STRATEGIES_COUNT):
+			if not is_position_active(CONTRACT_SYMBOL, i):
+				if is_it_time_to_open_long_position(i, current_time):
+					open_long_position(CONTRACT_SYMBOL, total_account_balance, TAKE_PROFIT_PERCENTS[i],
+									   STOP_LOSS_PERCENTS[i], i)
+				elif is_it_time_to_open_short_position(i, current_time):
+					open_short_position(CONTRACT_SYMBOL, total_account_balance, TAKE_PROFIT_PERCENTS[i],
+										STOP_LOSS_PERCENTS[i], i)
+		save_orders_dict()
 		is_bot_started = True
+
+
+def log_results():
+	print("_" * 60)
+	print("LEVERAGE:", LEVERAGE)
+	print("CONTRACT_SYMBOL:", CONTRACT_SYMBOL)
+	print("PRICE_DIRECTION_INDICATOR_NAMES:", PRICE_DIRECTION_INDICATOR_NAME_1, PRICE_DIRECTION_INDICATOR_NAME_2)
+	print("current_time:", current_time)
+	print("open_orders_list:", open_orders_list)
+	print("account_available_balance:", account_available_balance, FIRST_COIN_SYMBOL)
+	print("total_account_balance:", total_account_balance, FIRST_COIN_SYMBOL)
+	print("unrealized_profit:", unrealized_profit, FIRST_COIN_SYMBOL)
+	print("last_account_available_balances_list:", last_account_available_balances_list)
+	print("last_total_account_balances_list:", last_total_account_balances_list)
+	print("is_price_increasing:", is_price_increasing)
+	print("is_price_decreasing:", is_price_decreasing)
+	print("is_macd_increasing:", is_macd_increasing)
+	print("is_macd_decreasing:", is_macd_decreasing)
+	print("is_macd_positive:", is_macd_positive)
+	print("is_macd_negative:", is_macd_negative)
+	print("indicators_dict:", indicators_dict)
+	print("_" * 60)
 
 
 if __name__ == "__main__":
