@@ -31,6 +31,8 @@ To write custom bots you can:
 - Define a new strategy in `main.py` (especially inside `is_it_time_to_open_long_position` and `is_it_time_to_open_short_position` functions).
 - Config your bot settings in `config.py`.
 
+**Warning:** Binance has a maximum limit of 10 take-profit and stop-loss open orders, therefore do not use more than 5 strategies at the same time.
+
 ## To-do
 
 - Import modules, not variables.
