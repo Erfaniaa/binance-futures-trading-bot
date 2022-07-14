@@ -1,6 +1,5 @@
 from time import sleep
 from datetime import *
-
 from indicators import *
 from config import *
 import pickle
@@ -8,6 +7,7 @@ from candle import Candle
 from binance.futures import Futures
 from credentials import *
 from utils import *
+from telegram_notifier import *
 
 is_price_increasing = False
 is_price_decreasing = False
@@ -605,12 +605,15 @@ def is_position_active(contract_symbol, strategy_id):
 def cancel_extra_open_order(contract_symbol, strategy_id):
 	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
 		try:
+			order_id = None
 			if is_take_profit_unexecuted(contract_symbol, strategy_id)[1] and not is_stop_loss_unexecuted(contract_symbol, strategy_id)[1]:
 				order_id = orders_dict["strategy" + str(strategy_id) + "_last_take_profit_order_id"]
-				binance_futures_api.cancel_order(symbol=contract_symbol, orderId=order_id, timestamp=get_local_timestamp())
 			elif not is_take_profit_unexecuted(contract_symbol, strategy_id)[1] and is_stop_loss_unexecuted(contract_symbol, strategy_id)[1]:
 				order_id = orders_dict["strategy" + str(strategy_id) + "_last_stop_loss_order_id"]
+
+			if order_id is not None:
 				binance_futures_api.cancel_order(symbol=contract_symbol, orderId=order_id, timestamp=get_local_timestamp())
+				send_cancel_order_message(order_id)
 			return SUCCESSFUL
 		except:
 			pass
@@ -688,7 +691,7 @@ def set_position_mode(hedge_mode):
 	return ERROR
 
 
-def open_long_position(contract_symbol, first_coin_amount, take_profit_percent, stop_loss_percent, strategy_id):	
+def open_long_position(contract_symbol, first_coin_amount, take_profit_percent, stop_loss_percent, strategy_id):
 	print("=" * 60)
 	print("open_long_position for strategy #" + str(strategy_id))
 	market_order_created = False
@@ -699,6 +702,7 @@ def open_long_position(contract_symbol, first_coin_amount, take_profit_percent, 
 	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
 		try:
 			update_contract_last_price(contract_symbol)
+			order_id = "strategy" + str(strategy_id) + "_last_position_order_id"
 			market_order = binance_futures_api.new_order(symbol=contract_symbol,
 														 side="BUY",
 														 positionSide="LONG",
@@ -706,7 +710,8 @@ def open_long_position(contract_symbol, first_coin_amount, take_profit_percent, 
 														 type="MARKET",
 														 newClientOrderId=NEW_CLIENT_ORDER_ID_PREFIX + str(get_local_timestamp())[-10:],
 														 timestamp=get_local_timestamp())
-			update_orders_dict(get_local_timestamp(), "strategy" + str(strategy_id) + "_last_position_order_id", market_order["orderId"])
+			send_open_long_position_message(order_id)
+			update_orders_dict(get_local_timestamp(), order_id, market_order["orderId"])
 			market_order_created = True
 			break
 		except:
@@ -760,7 +765,7 @@ def open_long_position(contract_symbol, first_coin_amount, take_profit_percent, 
 	return ERROR
 
 
-def open_short_position(contract_symbol, first_coin_amount, take_profit_percent, stop_loss_percent, strategy_id):	
+def open_short_position(contract_symbol, first_coin_amount, take_profit_percent, stop_loss_percent, strategy_id):
 	print("=" * 60)
 	print("open_short_position for strategy #" + str(strategy_id))
 	market_order_created = False
@@ -771,6 +776,7 @@ def open_short_position(contract_symbol, first_coin_amount, take_profit_percent,
 	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
 		try:
 			update_contract_last_price(contract_symbol)
+			order_id = "strategy" + str(strategy_id) + "_last_position_order_id"
 			market_order = binance_futures_api.new_order(symbol=contract_symbol,
 														 side="SELL",
 														 positionSide="SHORT",
@@ -778,7 +784,8 @@ def open_short_position(contract_symbol, first_coin_amount, take_profit_percent,
 														 type="MARKET",
 														 newClientOrderId=NEW_CLIENT_ORDER_ID_PREFIX + str(get_local_timestamp())[-10:],
 														 timestamp=get_local_timestamp())
-			update_orders_dict(get_local_timestamp(), "strategy" + str(strategy_id) + "_last_position_order_id", market_order["orderId"])
+			update_orders_dict(get_local_timestamp(), order_id, market_order["orderId"])
+			send_open_short_position_message(order_id)
 			market_order_created = True
 			break
 		except:
@@ -870,7 +877,7 @@ def main():
 			if not is_position_active(CONTRACT_SYMBOL, i):
 				if is_it_time_to_open_long_position(i, current_time):
 					open_long_position(CONTRACT_SYMBOL, total_account_balance, TAKE_PROFIT_PERCENTS[i],
-									   STOP_LOSS_PERCENTS[i], i)
+										STOP_LOSS_PERCENTS[i], i)
 				elif is_it_time_to_open_short_position(i, current_time):
 					open_short_position(CONTRACT_SYMBOL, total_account_balance, TAKE_PROFIT_PERCENTS[i],
 										STOP_LOSS_PERCENTS[i], i)
@@ -879,25 +886,27 @@ def main():
 
 
 def log_results():
-	print("_" * 60)
-	print("LEVERAGE:", LEVERAGE)
-	print("CONTRACT_SYMBOL:", CONTRACT_SYMBOL)
-	print("PRICE_DIRECTION_INDICATOR_NAMES:", PRICE_DIRECTION_INDICATOR_NAME_1, PRICE_DIRECTION_INDICATOR_NAME_2)
-	print("current_time:", current_time)
-	print("open_orders_list:", open_orders_list)
-	print("account_available_balance:", account_available_balance, FIRST_COIN_SYMBOL)
-	print("total_account_balance:", total_account_balance, FIRST_COIN_SYMBOL)
-	print("unrealized_profit:", unrealized_profit, FIRST_COIN_SYMBOL)
-	print("last_account_available_balances_list:", last_account_available_balances_list)
-	print("last_total_account_balances_list:", last_total_account_balances_list)
-	print("is_price_increasing:", is_price_increasing)
-	print("is_price_decreasing:", is_price_decreasing)
-	print("is_macd_increasing:", is_macd_increasing)
-	print("is_macd_decreasing:", is_macd_decreasing)
-	print("is_macd_positive:", is_macd_positive)
-	print("is_macd_negative:", is_macd_negative)
-	print("indicators_dict:", indicators_dict)
-	print("_" * 60)
+	output = "_" * 60 + "\n" + \
+		"LEVERAGE:" + str(LEVERAGE) + "\n" + \
+		"CONTRACT_SYMBOL:" + str(CONTRACT_SYMBOL)+ "\n" + \
+		"PRICE_DIRECTION_INDICATOR_NAMES:" + str(PRICE_DIRECTION_INDICATOR_NAME_1) + str(PRICE_DIRECTION_INDICATOR_NAME_2) + "\n" + \
+		"current_time:" + str(current_time) + "\n" + \
+		"open_orders_list:" + str(open_orders_list)+ "\n" + \
+		"account_available_balance:" + str(account_available_balance) + str(FIRST_COIN_SYMBOL) + "\n" + \
+		"total_account_balance:" + str(total_account_balance) + str(FIRST_COIN_SYMBOL) + "\n" + \
+		"unrealized_profit:" + str(unrealized_profit) + str(FIRST_COIN_SYMBOL) + "\n" + \
+		"last_account_available_balances_list:" + str(last_account_available_balances_list) + "\n" + \
+		"last_total_account_balances_list:" + str(last_total_account_balances_list) + "\n" + \
+		"is_price_increasing:" + str(is_price_increasing) + "\n" + \
+		"is_price_decreasing:" + str(is_price_decreasing) + "\n" + \
+		"is_macd_increasing:" + str(is_macd_increasing) + "\n" + \
+		"is_macd_decreasing:" + str(is_macd_decreasing) + "\n" + \
+		"is_macd_positive:" + str(is_macd_positive) + "\n" + \
+		"is_macd_negative:" + str(is_macd_negative) + "\n" + \
+		"indicators_dict:" + str(indicators_dict) + "\n" + \
+		"_" * 60
+	print(output)
+	send_message(output)
 
 
 if __name__ == "__main__":
