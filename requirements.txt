@@ -1,3 +1,3 @@
-binance-futures-connector==1.10.0
+binance-futures-connector==3.1.1
 python-telegram-bot==13.13
 telegram==0.0.1

@@ -4,7 +4,7 @@ from indicators import *
 from config import *
 import pickle
 from candle import Candle
-from binance.futures import Futures
+from binance.um_futures import UMFutures
 from credentials import *
 from utils import *
 from telegram_message_sender import *
@@ -512,7 +512,7 @@ def close_all_open_positions_market_price():
 
 def init_bot():
 	global binance_futures_api
-	binance_futures_api = Futures(key=API_KEY, secret=SECRET_KEY)
+	binance_futures_api = UMFutures(key=API_KEY, secret=SECRET_KEY)
 
 
 def update_is_price_increasing(price_direction_indicator_name_1, price_direction_indicator_name_2):
