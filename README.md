@@ -9,6 +9,7 @@ Easy-to-use multi-strategic automatic trading for Binance Futures
 - There are no complexities and no database usage in this project. Even dependencies are a few.
 - It's easy for modifying and customization.
 - You can read the code for educational purposes.
+- You can notified by telegram messages
 
 ## Run
 
@@ -39,6 +40,14 @@ To write custom bots you can:
 - Use classes and make `main.py` smaller.
 - Add more indicators to `indicators.py`.
 - Find a better way for handling error codes.
+
+## Telegram Config
+
+First, you need to have a telegram account (bot) to access. Talk to [@Botfather](https://t.me/botfather)
+You will also need to know your own telegram user ID, so the bot knows who to send messages to. Talk to [@userinfobot](https://t.me/userinfobot) to get this information
+Finally, you have to /start your bot. Open up a private message with your bot by searching its username, then hit the start button.
+You must set TELEGRAM_API_KEY and TELEGRAM_USER_ID in `credentials.py` and SEND_TELEGRAM_MESSAGE = True in `config.py` 
+
 
 ## Credits
 
