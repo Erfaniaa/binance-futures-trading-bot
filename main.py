@@ -7,7 +7,7 @@ from candle import Candle
 from binance.futures import Futures
 from credentials import *
 from utils import *
-from telegram_notifier import *
+from telegram_message_sender import *
 
 is_price_increasing = False
 is_price_decreasing = False
@@ -492,6 +492,7 @@ def close_all_open_positions_market_price():
 												  newClientOrderId=NEW_CLIENT_ORDER_ID_PREFIX + str(
 													  get_local_timestamp())[-10:],
 												  timestamp=get_local_timestamp())
+					send_new_order_message(position["symbol"], "SELL", abs(position_quantity))
 				elif position_quantity < 0.0:
 					binance_futures_api.new_order(symbol=position["symbol"],
 												  side="BUY",
@@ -500,6 +501,8 @@ def close_all_open_positions_market_price():
 												  newClientOrderId=NEW_CLIENT_ORDER_ID_PREFIX + str(
 													  get_local_timestamp())[-10:],
 												  timestamp=get_local_timestamp())
+					send_new_order_message(position["symbol"], "BUY", abs(position_quantity))
+
 			return SUCCESSFUL
 		except:
 			pass
@@ -659,6 +662,7 @@ def cancel_symbol_open_orders(contract_symbol):
 	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
 		try:
 			binance_futures_api.cancel_open_orders(symbol=contract_symbol)
+			send_cancel_open_orders_for_symbol_message(contract_symbol)
 			return SUCCESSFUL
 		except:
 			pass
@@ -710,6 +714,7 @@ def open_long_position(contract_symbol, first_coin_amount, take_profit_percent, 
 														 type="MARKET",
 														 newClientOrderId=NEW_CLIENT_ORDER_ID_PREFIX + str(get_local_timestamp())[-10:],
 														 timestamp=get_local_timestamp())
+			send_new_order_message(contract_symbol, "BUY", position_quantity)
 			send_open_long_position_message(order_id)
 			update_orders_dict(get_local_timestamp(), order_id, market_order["orderId"])
 			market_order_created = True
@@ -741,6 +746,8 @@ def open_long_position(contract_symbol, first_coin_amount, take_profit_percent, 
 															  stopPrice=take_profit_price,
 															  quantity=position_quantity,
 															  timestamp=get_local_timestamp())
+			send_new_order_message(contract_symbol, "SELL", position_quantity)
+			send_open_long_position_message("strategy" + str(strategy_id) + "_last_take_profit_order_id")
 			stop_loss_order = binance_futures_api.new_order(symbol=contract_symbol,
 															side="SELL",
 															positionSide="LONG",
@@ -748,6 +755,8 @@ def open_long_position(contract_symbol, first_coin_amount, take_profit_percent, 
 															stopPrice=stop_loss_price,
 															quantity=position_quantity,
 															timestamp=get_local_timestamp())
+			send_new_order_message(contract_symbol, "SELL", position_quantity)
+			send_open_long_position_message("strategy" + str(strategy_id) + "_last_stop_loss_order_id")
 			update_orders_dict(get_local_timestamp(), "strategy" + str(strategy_id) + "_last_take_profit_order_id", take_profit_order["orderId"])
 			update_orders_dict(get_local_timestamp(), "strategy" + str(strategy_id) + "_last_stop_loss_order_id", stop_loss_order["orderId"])
 			print("get_local_timestamp:", get_local_timestamp())
@@ -784,8 +793,9 @@ def open_short_position(contract_symbol, first_coin_amount, take_profit_percent,
 														 type="MARKET",
 														 newClientOrderId=NEW_CLIENT_ORDER_ID_PREFIX + str(get_local_timestamp())[-10:],
 														 timestamp=get_local_timestamp())
-			update_orders_dict(get_local_timestamp(), order_id, market_order["orderId"])
+			send_new_order_message(contract_symbol, "SELL", position_quantity)
 			send_open_short_position_message(order_id)
+			update_orders_dict(get_local_timestamp(), order_id, market_order["orderId"])
 			market_order_created = True
 			break
 		except:
@@ -815,6 +825,8 @@ def open_short_position(contract_symbol, first_coin_amount, take_profit_percent,
 															  stopPrice=take_profit_price,
 															  quantity=position_quantity,
 															  timestamp=get_local_timestamp())
+			send_new_order_message(contract_symbol, "BUY", position_quantity)
+			send_open_short_position_message("strategy" + str(strategy_id) + "_last_take_profit_order_id")
 			stop_loss_order = binance_futures_api.new_order(symbol=contract_symbol,
 															side="BUY",
 															positionSide="SHORT",
@@ -822,6 +834,8 @@ def open_short_position(contract_symbol, first_coin_amount, take_profit_percent,
 															stopPrice=stop_loss_price,
 															quantity=position_quantity,
 															timestamp=get_local_timestamp())
+			send_new_order_message(contract_symbol, "BUY", position_quantity)
+			send_open_short_position_message("strategy" + str(strategy_id) + "_last_stop_loss_order_id")
 			update_orders_dict(get_local_timestamp(), "strategy" + str(strategy_id) + "_last_take_profit_order_id", take_profit_order["orderId"])
 			update_orders_dict(get_local_timestamp(), "strategy" + str(strategy_id) + "_last_stop_loss_order_id", stop_loss_order["orderId"])
 			print("get_local_timestamp:", get_local_timestamp())
