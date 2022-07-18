@@ -36,8 +36,8 @@ To write custom bots you can:
 
 ## Telegram Config
 
-1. Firstly, you need to create a Telegram bot, so talk to [@Botfather](https://t.me/botfather).
-2. Secondly, need to know your own Telegram user ID, so the bot knows who to send messages to. Talk to [@userinfobot](https://t.me/userinfobot) to get this information.
+1. Firstly, you need to create a Telegram bot, so talk to [@botfather](https://t.me/botfather).
+2. Secondly, need to know your own Telegram user ID, so the bot will know who to send messages to. Talk to [@userinfobot](https://t.me/userinfobot) to get this information.
 3. Thirdly, you have to `/start` your bot. Open up a private message with your bot by searching its username, then hit the start button.
 4. Finally, set `TELEGRAM_API_KEY` and `TELEGRAM_USER_ID` in `credentials.py`, and `SEND_TELEGRAM_MESSAGE` in `config.py` .
 
