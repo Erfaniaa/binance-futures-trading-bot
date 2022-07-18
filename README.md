@@ -9,7 +9,7 @@ Easy-to-use multi-strategic automatic trading for Binance Futures
 - There are no complexities and no database usage in this project. Even dependencies are a few.
 - It's easy for modifying and customization.
 - You can read the code for educational purposes.
-- You can notified by telegram messages
+- You can be notified with Telegram messages
 
 ## Run
 
