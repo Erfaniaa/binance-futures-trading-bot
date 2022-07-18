@@ -34,20 +34,19 @@ To write custom bots you can:
 
 **Warning:** Binance has a maximum limit of 10 take-profit and stop-loss open orders, therefore do not use more than 5 strategies at the same time.
 
+## Telegram Config
+
+1. Firstly, you need to create a Telegram bot, so talk to [@Botfather](https://t.me/botfather).
+2. Secondly, need to know your own Telegram user ID, so the bot knows who to send messages to. Talk to [@userinfobot](https://t.me/userinfobot) to get this information.
+3. Thirdly, you have to `/start` your bot. Open up a private message with your bot by searching its username, then hit the start button.
+4. Finally, set `TELEGRAM_API_KEY` and `TELEGRAM_USER_ID` in `credentials.py`, and `SEND_TELEGRAM_MESSAGE` in `config.py` .
+
 ## To-do
 
 - Import modules, not variables.
 - Use classes and make `main.py` smaller.
 - Add more indicators to `indicators.py`.
 - Find a better way for handling error codes.
-
-## Telegram Config
-
-First, you need to have a telegram account (bot) to access. Talk to [@Botfather](https://t.me/botfather)
-You will also need to know your own telegram user ID, so the bot knows who to send messages to. Talk to [@userinfobot](https://t.me/userinfobot) to get this information
-Finally, you have to /start your bot. Open up a private message with your bot by searching its username, then hit the start button.
-You must set TELEGRAM_API_KEY and TELEGRAM_USER_ID in `credentials.py` and SEND_TELEGRAM_MESSAGE = True in `config.py` 
-
 
 ## Credits
 
