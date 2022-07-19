@@ -48,6 +48,10 @@ To write custom bots you can:
 - Add more indicators to `indicators.py`.
 - Find a better way for handling error codes.
 
+## See Also
+
+- [Binance Spot Trading Bot](https://github.com/smzerehpoush/binance-spot-trading-bot)
+
 ## Credits
 
 [Erfan Alimohammadi](https://github.com/Erfaniaa) and [Amir Reza Shahmiri](https://github.com/Amirrezashahmiri)
