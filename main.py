@@ -3,6 +3,8 @@ from datetime import *
 from indicators import *
 from config import *
 import pickle
+import logging
+import sys
 from candle import Candle
 from binance.um_futures import UMFutures
 from credentials import *
@@ -37,7 +39,7 @@ def update_current_time():
 			return SUCCESSFUL
 		except:
 			pass
-	print("ERROR in update_current_time")
+	logging.error("ERROR in update_current_time")
 	return ERROR
 
 
@@ -74,7 +76,7 @@ def get_m1_candles(contract_symbol, start_datetime, end_datetime):
 			except:
 				pass
 		if not current_time_range_m1_candles_list:
-			print("ERROR in get_m1_candles")
+			logging.error("ERROR in get_m1_candles")
 			return (ERROR, [])
 		for m1_candle in current_time_range_m1_candles_list:
 			all_m1_candles_list.append(Candle(datetime.fromtimestamp(m1_candle[0] // 1000),
@@ -107,7 +109,7 @@ def get_m15_candles(contract_symbol, start_datetime, end_datetime):
 			except:
 				pass
 		if not current_time_range_m15_candles_list:
-			print("ERROR in get_m15_candles")
+			logging.error("ERROR in get_m15_candles")
 			return (ERROR, [])
 		for m15_candle in current_time_range_m15_candles_list:
 			all_m15_candles_list.append(Candle(datetime.fromtimestamp(m15_candle[0] // 1000),
@@ -140,7 +142,7 @@ def get_h1_candles(contract_symbol, start_datetime, end_datetime):
 			except:
 				pass
 		if not current_time_range_h1_candles_list:
-			print("ERROR in get_h1_candles")
+			logging.error("ERROR in get_h1_candles")
 			return (ERROR, [])
 		for h1_candle in current_time_range_h1_candles_list:
 			all_h1_candles_list.append(Candle(datetime.fromtimestamp(h1_candle[0] // 1000),
@@ -173,7 +175,7 @@ def get_h2_candles(contract_symbol, start_datetime, end_datetime):
 			except:
 				pass
 		if not current_time_range_h2_candles_list:
-			print("ERROR in get_h2_candles")
+			logging.error("ERROR in get_h2_candles")
 			return (ERROR, [])
 		for h2_candle in current_time_range_h2_candles_list:
 			all_h2_candles_list.append(Candle(datetime.fromtimestamp(h2_candle[0] // 1000),
@@ -206,7 +208,7 @@ def get_h4_candles(contract_symbol, start_datetime, end_datetime):
 			except:
 				pass
 		if not current_time_range_h4_candles_list:
-			print("ERROR in get_h4_candles")
+			logging.error("ERROR in get_h4_candles")
 			return (ERROR, [])
 		for h4_candle in current_time_range_h4_candles_list:
 			all_h4_candles_list.append(Candle(datetime.fromtimestamp(h4_candle[0] // 1000),
@@ -239,7 +241,7 @@ def get_d1_candles(contract_symbol, start_datetime, end_datetime):
 			except:
 				pass
 		if not current_time_range_d1_candles_list:
-			print("ERROR in get_d1_candles")
+			logging.error("ERROR in get_d1_candles")
 			return (ERROR, [])
 		for d1_candle in current_time_range_d1_candles_list:
 			all_d1_candles_list.append(Candle(datetime.fromtimestamp(d1_candle[0] // 1000),
@@ -460,7 +462,7 @@ def update_account_balance_and_unrealized_profit(first_coin_symbol):
 			return SUCCESSFUL
 		except:
 			pass
-	print("ERROR in update_account_balance_and_unrealized_profit")
+	logging.error("ERROR in update_account_balance_and_unrealized_profit")
 	return ERROR
 
 
@@ -472,7 +474,7 @@ def update_contract_last_price(contract_symbol):
 			return SUCCESSFUL
 		except:
 			pass
-	print("ERROR in update_contract_last_price")
+	logging.error("ERROR in update_contract_last_price")
 	return ERROR
 
 
@@ -506,7 +508,7 @@ def close_all_open_positions_market_price():
 			return SUCCESSFUL
 		except:
 			pass
-	print("ERROR in close_all_open_positions_market_price")
+	logging.error("ERROR in close_all_open_positions_market_price")
 	return ERROR
 
 
@@ -580,7 +582,7 @@ def is_take_profit_unexecuted(contract_symbol, strategy_id):
 				return (SUCCESSFUL, True)
 		except:
 			pass
-	print("ERROR in is_take_profit_unexecuted")
+	logging.error("ERROR in is_take_profit_unexecuted")
 	return (ERROR, False)
 
 
@@ -597,7 +599,7 @@ def is_stop_loss_unexecuted(contract_symbol, strategy_id):
 				return (SUCCESSFUL, True)
 		except:
 			pass
-	print("ERROR in is_stop_loss_unexecuted")
+	logging.error("ERROR in is_stop_loss_unexecuted")
 	return (ERROR, False)
 
 
@@ -620,7 +622,7 @@ def cancel_extra_open_order(contract_symbol, strategy_id):
 			return SUCCESSFUL
 		except:
 			pass
-	print("ERROR in cancel_extra_open_order")
+	logging.error("ERROR in cancel_extra_open_order")
 	return ERROR
 
 
@@ -666,7 +668,7 @@ def cancel_symbol_open_orders(contract_symbol):
 			return SUCCESSFUL
 		except:
 			pass
-	print("ERROR in cancel_symbol_open_orders")
+	logging.error("ERROR in cancel_symbol_open_orders")
 	return ERROR
 
 
@@ -677,7 +679,7 @@ def set_leverage(contract_symbol, leverage):
 			return SUCCESSFUL
 		except:
 			pass
-	print("ERROR in set_leverage")
+	logging.error("ERROR in set_leverage")
 	return ERROR
 
 
@@ -691,17 +693,17 @@ def set_position_mode(hedge_mode):
 			return SUCCESSFUL
 		except:
 			pass
-	print("ERROR/WARNING in set_position_mode (this may happen normally when position mode is unchanged)")
+	logging.error("ERROR/WARNING in set_position_mode (this may happen normally when position mode is unchanged)")
 	return ERROR
 
 
 def open_long_position(contract_symbol, first_coin_amount, take_profit_percent, stop_loss_percent, strategy_id):
-	print("=" * 60)
-	print("open_long_position for strategy #" + str(strategy_id))
+	logging.info("=" * 60)
+	logging.info("open_long_position for strategy #" + str(strategy_id))
 	market_order_created = False
 	position_quantity = round_down(WALLET_USAGE_PERCENT / 100 / STRATEGIES_COUNT * first_coin_amount / contract_last_price, POSITION_QUANTITY_DECIMAL_DIGITS)
 	if position_quantity < 10 ** (-POSITION_QUANTITY_DECIMAL_DIGITS):
-		print("=" * 60)
+		logging.info("=" * 60)
 		return SUCCESSFUL
 	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
 		try:
@@ -722,8 +724,8 @@ def open_long_position(contract_symbol, first_coin_amount, take_profit_percent, 
 		except:
 			pass
 	if not market_order_created:
-		print("ERROR in open_long_position")
-		print("=" * 60)
+		logging.error("ERROR in open_long_position")
+		logging.info("=" * 60)
 		return ERROR
 	sleep(4 * SLEEP_INTERVAL)
 	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
@@ -759,28 +761,28 @@ def open_long_position(contract_symbol, first_coin_amount, take_profit_percent, 
 			send_open_long_position_message("strategy" + str(strategy_id) + "_last_stop_loss_order_id")
 			update_orders_dict(get_local_timestamp(), "strategy" + str(strategy_id) + "_last_take_profit_order_id", take_profit_order["orderId"])
 			update_orders_dict(get_local_timestamp(), "strategy" + str(strategy_id) + "_last_stop_loss_order_id", stop_loss_order["orderId"])
-			print("get_local_timestamp:", get_local_timestamp())
-			print("position_entry_price:", position_entry_price)
-			print("take_profit_price:", take_profit_price)
-			print("stop_loss_price:", stop_loss_price)
-			print("take_profit_price_limit:", take_profit_price_limit)
-			print("stop_loss_price_limit:", stop_loss_price_limit)
-			print("=" * 60)
+			logging.info("get_local_timestamp:", get_local_timestamp())
+			logging.info("position_entry_price:", position_entry_price)
+			logging.info("take_profit_price:", take_profit_price)
+			logging.info("stop_loss_price:", stop_loss_price)
+			logging.info("take_profit_price_limit:", take_profit_price_limit)
+			logging.info("stop_loss_price_limit:", stop_loss_price_limit)
+			logging.info("=" * 60)
 			return SUCCESSFUL
 		except:
 			pass
-	print("ERROR in open_long_position")
-	print("=" * 60)
+	logging.error("ERROR in open_long_position")
+	logging.info("=" * 60)
 	return ERROR
 
 
 def open_short_position(contract_symbol, first_coin_amount, take_profit_percent, stop_loss_percent, strategy_id):
-	print("=" * 60)
-	print("open_short_position for strategy #" + str(strategy_id))
+	logging.info("=" * 60)
+	logging.info("open_short_position for strategy #" + str(strategy_id))
 	market_order_created = False
 	position_quantity = round_down(WALLET_USAGE_PERCENT / 100 / STRATEGIES_COUNT * first_coin_amount / contract_last_price, POSITION_QUANTITY_DECIMAL_DIGITS)
 	if position_quantity < 10 ** (-POSITION_QUANTITY_DECIMAL_DIGITS):
-		print("=" * 60)
+		logging.info("=" * 60)
 		return SUCCESSFUL
 	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
 		try:
@@ -801,8 +803,8 @@ def open_short_position(contract_symbol, first_coin_amount, take_profit_percent,
 		except:
 			pass
 	if not market_order_created:
-		print("ERROR in open_short_position")
-		print("=" * 60)
+		logging.error("ERROR in open_short_position")
+		logging.info("=" * 60)
 		return ERROR
 	sleep(4 * SLEEP_INTERVAL)
 	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
@@ -838,18 +840,18 @@ def open_short_position(contract_symbol, first_coin_amount, take_profit_percent,
 			send_open_short_position_message("strategy" + str(strategy_id) + "_last_stop_loss_order_id")
 			update_orders_dict(get_local_timestamp(), "strategy" + str(strategy_id) + "_last_take_profit_order_id", take_profit_order["orderId"])
 			update_orders_dict(get_local_timestamp(), "strategy" + str(strategy_id) + "_last_stop_loss_order_id", stop_loss_order["orderId"])
-			print("get_local_timestamp:", get_local_timestamp())
-			print("position_entry_price:", position_entry_price)
-			print("take_profit_price:", take_profit_price)
-			print("stop_loss_price:", stop_loss_price)
-			print("take_profit_price_limit:", take_profit_price_limit)
-			print("stop_loss_price_limit:", stop_loss_price_limit)
-			print("=" * 60)
+			logging.info("get_local_timestamp:", get_local_timestamp())
+			logging.info("position_entry_price:", position_entry_price)
+			logging.info("take_profit_price:", take_profit_price)
+			logging.info("stop_loss_price:", stop_loss_price)
+			logging.info("take_profit_price_limit:", take_profit_price_limit)
+			logging.info("stop_loss_price_limit:", stop_loss_price_limit)
+			logging.info("=" * 60)
 			return SUCCESSFUL
 		except:
 			pass
-	print("ERROR in open_short_position")
-	print("=" * 60)
+	logging.error("ERROR in open_short_position")
+	logging.info("=" * 60)
 	return ERROR
 
 
@@ -860,6 +862,9 @@ def check_and_cancel_extra_open_orders():
 
 
 def main():
+	logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s %(message)s',
+	                    datefmt='%Y/%m/%d %I:%M:%S %p',
+	                    handlers=[logging.FileHandler("application.log"), logging.StreamHandler(sys.stdout)])
 	global is_bot_started
 	init_bot()
 	update_account_balance_and_unrealized_profit(FIRST_COIN_SYMBOL)
@@ -919,7 +924,7 @@ def log_results():
 		"is_macd_negative:" + str(is_macd_negative) + "\n" + \
 		"indicators_dict:" + str(indicators_dict) + "\n" + \
 		"_" * 60
-	print(output)
+	logging.info(output)
 	send_message(output)
 
 

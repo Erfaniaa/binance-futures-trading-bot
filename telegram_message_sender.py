@@ -1,6 +1,7 @@
 import telegram
 from credentials import TELEGRAM_API_KEY, TELEGRAM_USER_ID
 from config import SEND_TELEGRAM_MESSAGE
+import logging
 
 telegram_bot = telegram.Bot(token=TELEGRAM_API_KEY)
 
@@ -32,4 +33,4 @@ def send_message(message):
     try:
         telegram_bot.send_message(chat_id=TELEGRAM_USER_ID, text=message)
     except telegram.error.TelegramError:
-        print("error in sending message to telegram")
+        logging.error("ERROR in sending message to telegram")
