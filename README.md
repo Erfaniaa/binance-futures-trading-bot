@@ -8,6 +8,7 @@ Easy-to-use multi-strategic automatic trading for Binance Futures with Telegram 
 - This project can handle multiple strategies at the same time.
 - There are no complexities and no database usage in this project. Even dependencies are a few.
 - It's easy for modifying and customization.
+- It automatically stores recent candles that can be used for machine learning model input.
 - You can read the code for educational purposes.
 - You can be notified with Telegram messages
 
