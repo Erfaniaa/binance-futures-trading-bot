@@ -1,4 +1,4 @@
-def get_wma(candles):
+def get_wma(candles: list) -> float:
 	if len(candles) == 0:
 		return 0
 	if len(candles) == 1:
@@ -14,7 +14,7 @@ def get_wma(candles):
 	return sum / coe_sum
 
 
-def get_ma(candles):
+def get_ma(candles: list) -> float:
 	if len(candles) == 0:
 		return 0
 	rs = 0
@@ -24,7 +24,7 @@ def get_ma(candles):
 	return rs
 
 
-def get_new_ema(last_ema, price, count):
+def get_new_ema(last_ema: int, price: int, count: int) -> float:
 	m = 2 / (count + 1)
 	price = price
 	s1 = (float(price) * float(m))
