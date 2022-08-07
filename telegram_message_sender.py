@@ -7,23 +7,23 @@ telegram_bot = telegram.Bot(token=TELEGRAM_API_KEY)
 
 
 def send_new_order_message(symbol, side, quantity):
-    send_message("new order created [" + str(symbol) + "," + side + "," + str(quantity) + "]")
+    send_message(f"new order created [{str(symbol)},{side},{str(quantity)}]")
 
 
 def send_open_long_position_message(order_id):
-    send_message("long position with order_id " + str(order_id) + " opened.")
+    send_message(f"long position with order_id {str(order_id)} opened.")
 
 
 def send_open_short_position_message(order_id):
-    send_message("short position with order_id " + str(order_id) + " opened.")
+    send_message(f"short position with order_id {str(order_id)} opened.")
 
 
 def send_cancel_order_message(order_id):
-    send_message("order with id " + str(order_id) + " canceled.")
+    send_message(f"order with id {str(order_id)} canceled.")
 
 
 def send_cancel_open_orders_for_symbol_message(symbol):
-    send_message("order with id " + str(symbol) + " canceled.")
+    send_message(f"order with id {str(symbol)} canceled.")
 
 
 def send_message(message):
