@@ -29,7 +29,7 @@ last_account_available_balances_list = []
 last_total_account_balances_list = []
 
 
-def update_current_time():
+def update_current_time() -> int:
 	global current_time
 	global last_time
 	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
@@ -43,11 +43,11 @@ def update_current_time():
 	return ERROR
 
 
-def get_local_timestamp():
+def get_local_timestamp() -> int:
 	return int(datetime.now().timestamp())
 
 
-def convert_binance_data_list_to_candles_list(binance_data_list):
+def convert_binance_data_list_to_candles_list(binance_data_list: list) -> list:
 	candles_list = []
 	for binance_data in binance_data_list:
 		candle = Candle(datetime.fromtimestamp(binance_data[0] // 1000), binance_data[1], binance_data[2],
@@ -56,7 +56,11 @@ def convert_binance_data_list_to_candles_list(binance_data_list):
 	return candles_list
 
 
-def get_m1_candles(contract_symbol, start_datetime, end_datetime):
+def get_m1_candles(
+	contract_symbol: str, 
+	start_datetime: datetime.datetime, 
+	end_datetime: datetime.datetime
+) -> tuple:
 	start_timestamp = int(start_datetime.timestamp() * 1000)
 	end_timestamp = int(end_datetime.timestamp() * 1000)
 	number_of_kline_candles_requests = (end_timestamp - start_timestamp + MAXIMUM_KLINE_CANDLES_PER_REQUEST * ONE_MINUTE_IN_MILLISECONDS - 1) // (MAXIMUM_KLINE_CANDLES_PER_REQUEST * ONE_MINUTE_IN_MILLISECONDS)
@@ -89,7 +93,11 @@ def get_m1_candles(contract_symbol, start_datetime, end_datetime):
 	return (SUCCESSFUL, all_m1_candles_list)
 
 
-def get_m15_candles(contract_symbol, start_datetime, end_datetime):
+def get_m15_candles(
+	contract_symbol: str, 
+	start_datetime: datetime.datetime, 
+	end_datetime: datetime.datetime
+) -> tuple:
 	start_timestamp = int(start_datetime.timestamp() * 1000)
 	end_timestamp = int(end_datetime.timestamp() * 1000)
 	number_of_kline_candles_requests = (end_timestamp - start_timestamp + MAXIMUM_KLINE_CANDLES_PER_REQUEST * ONE_MINUTE_IN_MILLISECONDS * 15 - 1) // (MAXIMUM_KLINE_CANDLES_PER_REQUEST * ONE_MINUTE_IN_MILLISECONDS * 15)
@@ -122,7 +130,11 @@ def get_m15_candles(contract_symbol, start_datetime, end_datetime):
 	return (SUCCESSFUL, all_m15_candles_list)
 
 
-def get_h1_candles(contract_symbol, start_datetime, end_datetime):
+def get_h1_candles(
+	contract_symbol: str, 
+	start_datetime: datetime.datetime, 
+	end_datetime: datetime.datetime
+) -> tuple:
 	start_timestamp = int(start_datetime.timestamp() * 1000)
 	end_timestamp = int(end_datetime.timestamp() * 1000)
 	number_of_kline_candles_requests = (end_timestamp - start_timestamp + MAXIMUM_KLINE_CANDLES_PER_REQUEST * ONE_MINUTE_IN_MILLISECONDS * 60 - 1) // (MAXIMUM_KLINE_CANDLES_PER_REQUEST * ONE_MINUTE_IN_MILLISECONDS * 60)
@@ -155,7 +167,11 @@ def get_h1_candles(contract_symbol, start_datetime, end_datetime):
 	return (SUCCESSFUL, all_h1_candles_list)
 
 
-def get_h2_candles(contract_symbol, start_datetime, end_datetime):
+def get_h2_candles(
+	contract_symbol: str, 
+	start_datetime: datetime.datetime, 
+	end_datetime: datetime.datetime
+) -> tuple:
 	start_timestamp = int(start_datetime.timestamp() * 1000)
 	end_timestamp = int(end_datetime.timestamp() * 1000)
 	number_of_kline_candles_requests = (end_timestamp - start_timestamp + MAXIMUM_KLINE_CANDLES_PER_REQUEST * ONE_MINUTE_IN_MILLISECONDS * 60 * 2 - 1) // (MAXIMUM_KLINE_CANDLES_PER_REQUEST * ONE_MINUTE_IN_MILLISECONDS * 60 * 2)
@@ -188,7 +204,11 @@ def get_h2_candles(contract_symbol, start_datetime, end_datetime):
 	return (SUCCESSFUL, all_h2_candles_list)
 
 
-def get_h4_candles(contract_symbol, start_datetime, end_datetime):
+def get_h4_candles(
+	contract_symbol: str, 
+	start_datetime: datetime.datetime, 
+	end_datetime: datetime.datetime
+) -> tuple:
 	start_timestamp = int(start_datetime.timestamp() * 1000)
 	end_timestamp = int(end_datetime.timestamp() * 1000)
 	number_of_kline_candles_requests = (end_timestamp - start_timestamp + MAXIMUM_KLINE_CANDLES_PER_REQUEST * ONE_MINUTE_IN_MILLISECONDS * 60 * 4 - 1) // (MAXIMUM_KLINE_CANDLES_PER_REQUEST * ONE_MINUTE_IN_MILLISECONDS * 60 * 4)
@@ -221,7 +241,11 @@ def get_h4_candles(contract_symbol, start_datetime, end_datetime):
 	return (SUCCESSFUL, all_h4_candles_list)
 
 
-def get_d1_candles(contract_symbol, start_datetime, end_datetime):
+def get_d1_candles(
+	contract_symbol: str, 
+	start_datetime: datetime.datetime, 
+	end_datetime: datetime.datetime
+) -> tuple:
 	start_timestamp = int(start_datetime.timestamp() * 1000)
 	end_timestamp = int(end_datetime.timestamp() * 1000)
 	number_of_kline_candles_requests = (end_timestamp - start_timestamp + MAXIMUM_KLINE_CANDLES_PER_REQUEST * ONE_MINUTE_IN_MILLISECONDS * 60 * 24 - 1) // (MAXIMUM_KLINE_CANDLES_PER_REQUEST * ONE_MINUTE_IN_MILLISECONDS * 60 * 24)
@@ -254,7 +278,13 @@ def get_d1_candles(contract_symbol, start_datetime, end_datetime):
 	return (SUCCESSFUL, all_d1_candles_list)
 
 
-def update_recent_prices_list(contract_symbol, current_time, candles_count, timeframe):
+def update_recent_prices_list(
+	contract_symbol: str, 
+	current_time: datetime.datetime, 
+	candles_count: int,
+	timeframe: str
+) -> None:
+
 	global recent_m1_open_prices_list
 	global recent_m1_high_prices_list
 	global recent_m1_low_prices_list
@@ -335,54 +365,58 @@ def update_recent_prices_list(contract_symbol, current_time, candles_count, time
 		recent_d1_close_prices_list = [float(candle.close) for candle in recent_candles_list]
 
 
-def load_orders_dict():
+def load_orders_dict() -> None:
 	global orders_dict
 	orders_dict = load_orders_dict_from_file(ORDERS_DICT_FILENAME)
 
 
-def load_orders_dict_from_file(filename=ORDERS_DICT_FILENAME):
+def load_orders_dict_from_file(filename: str = ORDERS_DICT_FILENAME) -> list:
 	with open(filename, 'rb') as handle:
 		return pickle.load(handle)
 
 
-def save_orders_dict():
+def save_orders_dict() -> None:
 	save_orders_dict_to_file(ORDERS_DICT_FILENAME)
 
 
-def save_orders_dict_to_file(filename=ORDERS_DICT_FILENAME):
+def save_orders_dict_to_file(filename : str = ORDERS_DICT_FILENAME) -> None:
 	global orders_dict
 	with open(filename, 'wb') as handle:
 		pickle.dump(orders_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 
-def update_orders_dict(current_time, key, value):
+def update_orders_dict(current_time: datetime.datetime, key: str, value: str) -> None:
 	global orders_dict
 	orders_dict["timestamp"] = current_time
 	orders_dict[key] = value
 
 
-def load_indicators_dict():
+def load_indicators_dict() -> None:
 	global indicators_dict
 	indicators_dict = load_indicators_dict_from_file(INDICATORS_DICT_FILENAME)
 
 
-def load_indicators_dict_from_file(filename=INDICATORS_DICT_FILENAME):
+def load_indicators_dict_from_file(filename: str = INDICATORS_DICT_FILENAME) -> list:
 	global indicators_dict
 	with open(filename, 'rb') as handle:
 		return pickle.load(handle)
 
 
-def save_indicators_dict():
+def save_indicators_dict() -> None:
 	save_indicators_dict_to_file(INDICATORS_DICT_FILENAME)
 
 
-def save_indicators_dict_to_file(filename=INDICATORS_DICT_FILENAME):
+def save_indicators_dict_to_file(filename: str = INDICATORS_DICT_FILENAME) -> None:
 	global indicators_dict
 	with open(filename, 'wb') as handle:
 		pickle.dump(indicators_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 
-def update_indicators_dict(contract_symbol, current_time, timeframe):
+def update_indicators_dict(
+	contract_symbol: str,
+	current_time: datetime.datetime, 
+	timeframe: str
+) -> None:
 	global indicators_dict
 	if timeframe == "m1":
 		candles_list = get_m1_candles(contract_symbol, datetime.fromtimestamp(indicators_dict["candle_close_timestamp"]), current_time)[1]
@@ -437,7 +471,7 @@ def update_indicators_dict(contract_symbol, current_time, timeframe):
 		}
 
 
-def update_account_balance_and_unrealized_profit(first_coin_symbol):
+def update_account_balance_and_unrealized_profit(first_coin_symbol: str) -> int:
 	global account_available_balance
 	global total_account_balance
 	global last_account_available_balances_list
@@ -466,7 +500,7 @@ def update_account_balance_and_unrealized_profit(first_coin_symbol):
 	return ERROR
 
 
-def update_contract_last_price(contract_symbol):
+def update_contract_last_price(contract_symbol: str) -> int:
 	global contract_last_price
 	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
 		try:
@@ -478,7 +512,7 @@ def update_contract_last_price(contract_symbol):
 	return ERROR
 
 
-def close_all_open_positions_market_price():
+def close_all_open_positions_market_price() -> int:
 	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
 		try:
 			all_open_positions = binance_futures_api.get_position_risk(timestamp=get_local_timestamp())
@@ -512,12 +546,15 @@ def close_all_open_positions_market_price():
 	return ERROR
 
 
-def init_bot():
+def init_bot() -> None:
 	global binance_futures_api
 	binance_futures_api = UMFutures(key=API_KEY, secret=SECRET_KEY)
 
 
-def update_is_price_increasing(price_direction_indicator_name_1, price_direction_indicator_name_2):
+def update_is_price_increasing(
+	price_direction_indicator_name_1: str, 
+	price_direction_indicator_name_2: str
+) -> None:
 	global last_is_price_increasing
 	global is_price_increasing
 	global indicators_dict
@@ -526,7 +563,10 @@ def update_is_price_increasing(price_direction_indicator_name_1, price_direction
 	is_price_increasing = indicators_dict[price_direction_indicator_name_1] > indicators_dict[price_direction_indicator_name_2]
 
 
-def update_is_price_decreasing(price_direction_indicator_name_1, price_direction_indicator_name_2):
+def update_is_price_decreasing(
+	price_direction_indicator_name_1: str,
+	price_direction_indicator_name_2: str
+) -> None:
 	global last_is_price_decreasing
 	global is_price_decreasing
 	global indicators_dict
@@ -535,7 +575,7 @@ def update_is_price_decreasing(price_direction_indicator_name_1, price_direction
 	is_price_decreasing = indicators_dict[price_direction_indicator_name_1] < indicators_dict[price_direction_indicator_name_2]
 
 
-def update_is_macd_increasing():
+def update_is_macd_increasing() -> None:
 	global last_is_macd_increasing
 	global is_macd_increasing
 	global indicators_dict
@@ -543,7 +583,7 @@ def update_is_macd_increasing():
 	is_macd_increasing = indicators_dict["macd_line"] > indicators_dict["signal_line"]
 
 
-def update_is_macd_decreasing():
+def update_is_macd_decreasing() -> None:
 	global last_is_macd_decreasing
 	global is_macd_decreasing
 	global indicators_dict
@@ -552,7 +592,7 @@ def update_is_macd_decreasing():
 	is_macd_decreasing = indicators_dict["macd_line"] < indicators_dict["signal_line"]
 
 
-def update_is_macd_positive():
+def update_is_macd_positive() -> None:
 	global last_is_macd_positive
 	global is_macd_positive
 	global indicators_dict
@@ -560,7 +600,7 @@ def update_is_macd_positive():
 	is_macd_positive = indicators_dict["macd_line"] > 0
 
 
-def update_is_macd_negative():
+def update_is_macd_negative() -> None:
 	global last_is_macd_negative
 	global is_macd_negative
 	global indicators_dict
@@ -569,7 +609,7 @@ def update_is_macd_negative():
 	is_macd_negative = indicators_dict["macd_line"] < 0
 
 
-def is_take_profit_unexecuted(contract_symbol, strategy_id):
+def is_take_profit_unexecuted(contract_symbol: str, strategy_id: int) -> tuple:
 	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
 		try:
 			order_id = orders_dict.get("strategy" + str(strategy_id) + "_last_take_profit_order_id", -1)
@@ -586,7 +626,7 @@ def is_take_profit_unexecuted(contract_symbol, strategy_id):
 	return (ERROR, False)
 
 
-def is_stop_loss_unexecuted(contract_symbol, strategy_id):
+def is_stop_loss_unexecuted(contract_symbol: str, strategy_id: int) -> tuple:
 	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
 		try:
 			order_id = orders_dict.get("strategy" + str(strategy_id) + "_last_stop_loss_order_id", -1)
@@ -603,11 +643,11 @@ def is_stop_loss_unexecuted(contract_symbol, strategy_id):
 	return (ERROR, False)
 
 
-def is_position_active(contract_symbol, strategy_id):
+def is_position_active(contract_symbol: str, strategy_id: int) -> bool:
 	return is_take_profit_unexecuted(contract_symbol, strategy_id)[1] and is_stop_loss_unexecuted(contract_symbol, strategy_id)[1]
 
 
-def cancel_extra_open_order(contract_symbol, strategy_id):
+def cancel_extra_open_order(contract_symbol: str, strategy_id: int) -> int:
 	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
 		try:
 			order_id = None
@@ -626,7 +666,7 @@ def cancel_extra_open_order(contract_symbol, strategy_id):
 	return ERROR
 
 
-def is_it_time_to_open_long_position(strategy_id, current_time):
+def is_it_time_to_open_long_position(strategy_id: int, current_time: datetime.datetime) -> bool:
 	if strategy_id == 0:
 		return is_bot_started and is_price_increasing and not last_is_price_increasing
 	if strategy_id == 1:
@@ -638,7 +678,7 @@ def is_it_time_to_open_long_position(strategy_id, current_time):
 	return False
 
 
-def is_it_time_to_open_short_position(strategy_id, current_time):
+def is_it_time_to_open_short_position(strategy_id: int, current_time: datetime.datetime) -> bool:
 	if strategy_id == 0:
 		return is_bot_started and is_price_decreasing and not last_is_price_decreasing
 	if strategy_id == 1:
@@ -650,17 +690,17 @@ def is_it_time_to_open_short_position(strategy_id, current_time):
 	return False
 
 
-def is_it_time_to_update_and_trade(current_time):
+def is_it_time_to_update_and_trade(current_time: datetime.datetime) -> bool:
 	return int(current_time.minute) == 0 and HANDLING_POSITIONS_TIME_SECOND <= int(
 		current_time.second) % 60 <= HANDLING_POSITIONS_TIME_SECOND + 1
 
 
-def is_it_time_to_cancel_extra_open_orders(current_time):
+def is_it_time_to_cancel_extra_open_orders(current_time: datetime.datetime) -> bool:
 	return int(current_time.minute) % 5 == 0 and HANDLING_POSITIONS_TIME_SECOND <= int(
 		current_time.second) % 60 <= HANDLING_POSITIONS_TIME_SECOND + 1
 
 
-def cancel_symbol_open_orders(contract_symbol):
+def cancel_symbol_open_orders(contract_symbol: str) -> int:
 	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
 		try:
 			binance_futures_api.cancel_open_orders(symbol=contract_symbol)
@@ -672,7 +712,7 @@ def cancel_symbol_open_orders(contract_symbol):
 	return ERROR
 
 
-def set_leverage(contract_symbol, leverage):
+def set_leverage(contract_symbol: str, leverage: int) -> int:
 	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
 		try:
 			binance_futures_api.change_leverage(symbol=contract_symbol, leverage=leverage, timestamp=get_local_timestamp())
@@ -683,7 +723,7 @@ def set_leverage(contract_symbol, leverage):
 	return ERROR
 
 
-def set_position_mode(hedge_mode):
+def set_position_mode(hedge_mode: bool) -> int:
 	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
 		try:
 			if hedge_mode:
@@ -697,7 +737,13 @@ def set_position_mode(hedge_mode):
 	return ERROR
 
 
-def open_long_position(contract_symbol, first_coin_amount, take_profit_percent, stop_loss_percent, strategy_id):
+def open_long_position(
+	contract_symbol: str,
+	first_coin_amount: int,
+	take_profit_percent: int, 
+	stop_loss_percent: int,
+	strategy_id: int
+) -> int:
 	logging.info("=" * 60)
 	logging.info("open_long_position for strategy #" + str(strategy_id))
 	market_order_created = False
@@ -776,7 +822,13 @@ def open_long_position(contract_symbol, first_coin_amount, take_profit_percent, 
 	return ERROR
 
 
-def open_short_position(contract_symbol, first_coin_amount, take_profit_percent, stop_loss_percent, strategy_id):
+def open_short_position(
+	contract_symbol: str, 
+	first_coin_amount: int, 
+	take_profit_percent: int, 
+	stop_loss_percent: int, 
+	strategy_id: int
+) -> int:
 	logging.info("=" * 60)
 	logging.info("open_short_position for strategy #" + str(strategy_id))
 	market_order_created = False
@@ -855,13 +907,13 @@ def open_short_position(contract_symbol, first_coin_amount, take_profit_percent,
 	return ERROR
 
 
-def check_and_cancel_extra_open_orders():
+def check_and_cancel_extra_open_orders() -> None:
 	if is_it_time_to_cancel_extra_open_orders(current_time):
 		for i in range(STRATEGIES_COUNT):
 			cancel_extra_open_order(CONTRACT_SYMBOL, i)
 
 
-def main():
+def main() -> None:
 	logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s %(message)s',
 	                    datefmt='%Y/%m/%d %I:%M:%S %p',
 	                    handlers=[logging.FileHandler("application.log"), logging.StreamHandler(sys.stdout)])
@@ -904,26 +956,28 @@ def main():
 		is_bot_started = True
 
 
-def log_results():
-	output = "_" * 60 + "\n" + \
-		"LEVERAGE:" + str(LEVERAGE) + "\n" + \
-		"CONTRACT_SYMBOL:" + str(CONTRACT_SYMBOL)+ "\n" + \
-		"PRICE_DIRECTION_INDICATOR_NAMES:" + str(PRICE_DIRECTION_INDICATOR_NAME_1) + str(PRICE_DIRECTION_INDICATOR_NAME_2) + "\n" + \
-		"current_time:" + str(current_time) + "\n" + \
-		"open_orders_list:" + str(open_orders_list)+ "\n" + \
-		"account_available_balance:" + str(account_available_balance) + str(FIRST_COIN_SYMBOL) + "\n" + \
-		"total_account_balance:" + str(total_account_balance) + str(FIRST_COIN_SYMBOL) + "\n" + \
-		"unrealized_profit:" + str(unrealized_profit) + str(FIRST_COIN_SYMBOL) + "\n" + \
-		"last_account_available_balances_list:" + str(last_account_available_balances_list) + "\n" + \
-		"last_total_account_balances_list:" + str(last_total_account_balances_list) + "\n" + \
-		"is_price_increasing:" + str(is_price_increasing) + "\n" + \
-		"is_price_decreasing:" + str(is_price_decreasing) + "\n" + \
-		"is_macd_increasing:" + str(is_macd_increasing) + "\n" + \
-		"is_macd_decreasing:" + str(is_macd_decreasing) + "\n" + \
-		"is_macd_positive:" + str(is_macd_positive) + "\n" + \
-		"is_macd_negative:" + str(is_macd_negative) + "\n" + \
-		"indicators_dict:" + str(indicators_dict) + "\n" + \
-		"_" * 60
+def log_results() -> None:
+	output = (
+		f"{'_' * 60}\n"
+		f"LEVERAGE:{str(LEVERAGE)}\n"
+		f"CONTRACT_SYMBOL:{str(CONTRACT_SYMBOL)}\n"
+		f"PRICE_DIRECTION_INDICATOR_NAMES:{str(PRICE_DIRECTION_INDICATOR_NAME_1)}{str(PRICE_DIRECTION_INDICATOR_NAME_2)}\n"
+		f"current_time:{str(current_time)}\n"
+		f"open_orders_list:{str(open_orders_list)}\n"
+		f"account_available_balance:{str(account_available_balance)}{str(FIRST_COIN_SYMBOL)}\n"
+		f"total_account_balance:{str(total_account_balance)}{str(FIRST_COIN_SYMBOL)}\n"
+		f"unrealized_profit:{str(unrealized_profit)}{str(FIRST_COIN_SYMBOL)}\n"
+		f"last_account_available_balances_list:{str(last_account_available_balances_list)}\n"
+		f"last_total_account_balances_list:{str(last_total_account_balances_list)}\n"
+		f"is_price_increasing:{str(is_price_increasing)}\n"
+		f"is_price_decreasing:{str(is_price_decreasing)}\n"
+		f"is_macd_increasing:{str(is_macd_increasing)}\n"
+		f"is_macd_decreasing:{str(is_macd_decreasing)}\n"
+		f"is_macd_positive:{str(is_macd_positive)}\n"
+		f"is_macd_negative:{str(is_macd_negative)}\n"
+		f"indicators_dict:{str(indicators_dict)}\n"
+	)
+
 	logging.info(output)
 	send_message(output)
 
