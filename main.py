@@ -957,25 +957,27 @@ def main() -> None:
 
 
 def log_results() -> None:
-	output = "_" * 60 + "\n" + \
-		"LEVERAGE:" + str(LEVERAGE) + "\n" + \
-		"CONTRACT_SYMBOL:" + str(CONTRACT_SYMBOL)+ "\n" + \
-		"PRICE_DIRECTION_INDICATOR_NAMES:" + str(PRICE_DIRECTION_INDICATOR_NAME_1) + str(PRICE_DIRECTION_INDICATOR_NAME_2) + "\n" + \
-		"current_time:" + str(current_time) + "\n" + \
-		"open_orders_list:" + str(open_orders_list)+ "\n" + \
-		"account_available_balance:" + str(account_available_balance) + str(FIRST_COIN_SYMBOL) + "\n" + \
-		"total_account_balance:" + str(total_account_balance) + str(FIRST_COIN_SYMBOL) + "\n" + \
-		"unrealized_profit:" + str(unrealized_profit) + str(FIRST_COIN_SYMBOL) + "\n" + \
-		"last_account_available_balances_list:" + str(last_account_available_balances_list) + "\n" + \
-		"last_total_account_balances_list:" + str(last_total_account_balances_list) + "\n" + \
-		"is_price_increasing:" + str(is_price_increasing) + "\n" + \
-		"is_price_decreasing:" + str(is_price_decreasing) + "\n" + \
-		"is_macd_increasing:" + str(is_macd_increasing) + "\n" + \
-		"is_macd_decreasing:" + str(is_macd_decreasing) + "\n" + \
-		"is_macd_positive:" + str(is_macd_positive) + "\n" + \
-		"is_macd_negative:" + str(is_macd_negative) + "\n" + \
-		"indicators_dict:" + str(indicators_dict) + "\n" + \
-		"_" * 60
+	output = (
+		f"{'_' * 60}\n"
+		f"LEVERAGE:{str(LEVERAGE)}\n"
+		f"CONTRACT_SYMBOL:{str(CONTRACT_SYMBOL)}\n"
+		f"PRICE_DIRECTION_INDICATOR_NAMES:{str(PRICE_DIRECTION_INDICATOR_NAME_1)}{str(PRICE_DIRECTION_INDICATOR_NAME_2)}\n"
+		f"current_time:{str(current_time)}\n"
+		f"open_orders_list:{str(open_orders_list)}\n"
+		f"account_available_balance:{str(account_available_balance)}{str(FIRST_COIN_SYMBOL)}\n"
+		f"total_account_balance:{str(total_account_balance)}{str(FIRST_COIN_SYMBOL)}\n"
+		f"unrealized_profit:{str(unrealized_profit)}{str(FIRST_COIN_SYMBOL)}\n"
+		f"last_account_available_balances_list:{str(last_account_available_balances_list)}\n"
+		f"last_total_account_balances_list:{str(last_total_account_balances_list)}\n"
+		f"is_price_increasing:{str(is_price_increasing)}\n"
+		f"is_price_decreasing:{str(is_price_decreasing)}\n"
+		f"is_macd_increasing:{str(is_macd_increasing)}\n"
+		f"is_macd_decreasing:{str(is_macd_decreasing)}\n"
+		f"is_macd_positive:{str(is_macd_positive)}\n"
+		f"is_macd_negative:{str(is_macd_negative)}\n"
+		f"indicators_dict:{str(indicators_dict)}\n"
+	)
+
 	logging.info(output)
 	send_message(output)
 
