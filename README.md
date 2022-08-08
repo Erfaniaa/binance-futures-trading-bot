@@ -1,7 +1,7 @@
 # Binance Futures Trading Bot
 
 Easy-to-use multi-strategic automatic trading for Binance Futures with Telegram integration
-<img src="https://user-images.githubusercontent.com/7780269/183316217-a1e8faba-48cd-4317-abe7-9ceeecd0216a.png" width="50%">
+<center><img src="https://user-images.githubusercontent.com/7780269/183316217-a1e8faba-48cd-4317-abe7-9ceeecd0216a.png" width="50%" align="center"></center>
 ## Features
 
 - You can run it fast and it's easy to use.
