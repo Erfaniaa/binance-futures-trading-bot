@@ -3,7 +3,9 @@ from credentials import TELEGRAM_API_KEY, TELEGRAM_USER_ID
 from config import SEND_TELEGRAM_MESSAGE
 import logging
 
-telegram_bot = telegram.Bot(token=TELEGRAM_API_KEY)
+
+if SEND_TELEGRAM_MESSAGE:
+    telegram_bot = telegram.Bot(token=TELEGRAM_API_KEY)
 
 
 def send_new_order_message(symbol, side, quantity):
