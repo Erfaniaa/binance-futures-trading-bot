@@ -58,8 +58,8 @@ def convert_binance_data_list_to_candles_list(binance_data_list: list) -> list:
 
 def get_m1_candles(
 	contract_symbol: str, 
-	start_datetime: datetime.datetime, 
-	end_datetime: datetime.datetime
+	start_datetime: datetime, 
+	end_datetime: datetime
 ) -> tuple:
 	start_timestamp = int(start_datetime.timestamp() * 1000)
 	end_timestamp = int(end_datetime.timestamp() * 1000)
@@ -95,8 +95,8 @@ def get_m1_candles(
 
 def get_m15_candles(
 	contract_symbol: str, 
-	start_datetime: datetime.datetime, 
-	end_datetime: datetime.datetime
+	start_datetime: datetime, 
+	end_datetime: datetime
 ) -> tuple:
 	start_timestamp = int(start_datetime.timestamp() * 1000)
 	end_timestamp = int(end_datetime.timestamp() * 1000)
@@ -132,8 +132,8 @@ def get_m15_candles(
 
 def get_h1_candles(
 	contract_symbol: str, 
-	start_datetime: datetime.datetime, 
-	end_datetime: datetime.datetime
+	start_datetime: datetime, 
+	end_datetime: datetime
 ) -> tuple:
 	start_timestamp = int(start_datetime.timestamp() * 1000)
 	end_timestamp = int(end_datetime.timestamp() * 1000)
@@ -169,8 +169,8 @@ def get_h1_candles(
 
 def get_h2_candles(
 	contract_symbol: str, 
-	start_datetime: datetime.datetime, 
-	end_datetime: datetime.datetime
+	start_datetime: datetime, 
+	end_datetime: datetime
 ) -> tuple:
 	start_timestamp = int(start_datetime.timestamp() * 1000)
 	end_timestamp = int(end_datetime.timestamp() * 1000)
@@ -206,8 +206,8 @@ def get_h2_candles(
 
 def get_h4_candles(
 	contract_symbol: str, 
-	start_datetime: datetime.datetime, 
-	end_datetime: datetime.datetime
+	start_datetime: datetime, 
+	end_datetime: datetime
 ) -> tuple:
 	start_timestamp = int(start_datetime.timestamp() * 1000)
 	end_timestamp = int(end_datetime.timestamp() * 1000)
@@ -243,8 +243,8 @@ def get_h4_candles(
 
 def get_d1_candles(
 	contract_symbol: str, 
-	start_datetime: datetime.datetime, 
-	end_datetime: datetime.datetime
+	start_datetime: datetime, 
+	end_datetime: datetime
 ) -> tuple:
 	start_timestamp = int(start_datetime.timestamp() * 1000)
 	end_timestamp = int(end_datetime.timestamp() * 1000)
@@ -280,7 +280,7 @@ def get_d1_candles(
 
 def update_recent_prices_list(
 	contract_symbol: str, 
-	current_time: datetime.datetime, 
+	current_time: datetime, 
 	candles_count: int,
 	timeframe: str
 ) -> None:
@@ -385,7 +385,7 @@ def save_orders_dict_to_file(filename : str = ORDERS_DICT_FILENAME) -> None:
 		pickle.dump(orders_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 
-def update_orders_dict(current_time: datetime.datetime, key: str, value: str) -> None:
+def update_orders_dict(current_time: datetime, key: str, value: str) -> None:
 	global orders_dict
 	orders_dict["timestamp"] = current_time
 	orders_dict[key] = value
@@ -414,7 +414,7 @@ def save_indicators_dict_to_file(filename: str = INDICATORS_DICT_FILENAME) -> No
 
 def update_indicators_dict(
 	contract_symbol: str,
-	current_time: datetime.datetime, 
+	current_time: datetime, 
 	timeframe: str
 ) -> None:
 	global indicators_dict
@@ -666,7 +666,7 @@ def cancel_extra_open_order(contract_symbol: str, strategy_id: int) -> int:
 	return ERROR
 
 
-def is_it_time_to_open_long_position(strategy_id: int, current_time: datetime.datetime) -> bool:
+def is_it_time_to_open_long_position(strategy_id: int, current_time: datetime) -> bool:
 	if strategy_id == 0:
 		return is_bot_started and is_price_increasing and not last_is_price_increasing
 	if strategy_id == 1:
@@ -678,7 +678,7 @@ def is_it_time_to_open_long_position(strategy_id: int, current_time: datetime.da
 	return False
 
 
-def is_it_time_to_open_short_position(strategy_id: int, current_time: datetime.datetime) -> bool:
+def is_it_time_to_open_short_position(strategy_id: int, current_time: datetime) -> bool:
 	if strategy_id == 0:
 		return is_bot_started and is_price_decreasing and not last_is_price_decreasing
 	if strategy_id == 1:
@@ -690,12 +690,12 @@ def is_it_time_to_open_short_position(strategy_id: int, current_time: datetime.d
 	return False
 
 
-def is_it_time_to_update_and_trade(current_time: datetime.datetime) -> bool:
+def is_it_time_to_update_and_trade(current_time: datetime) -> bool:
 	return int(current_time.minute) == 0 and HANDLING_POSITIONS_TIME_SECOND <= int(
 		current_time.second) % 60 <= HANDLING_POSITIONS_TIME_SECOND + 1
 
 
-def is_it_time_to_cancel_extra_open_orders(current_time: datetime.datetime) -> bool:
+def is_it_time_to_cancel_extra_open_orders(current_time: datetime) -> bool:
 	return int(current_time.minute) % 5 == 0 and HANDLING_POSITIONS_TIME_SECOND <= int(
 		current_time.second) % 60 <= HANDLING_POSITIONS_TIME_SECOND + 1
 
@@ -914,7 +914,7 @@ def check_and_cancel_extra_open_orders() -> None:
 
 
 def main() -> None:
-	logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s %(message)s',
+	logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s',
 	                    datefmt='%Y/%m/%d %I:%M:%S %p',
 	                    handlers=[logging.FileHandler("application.log"), logging.StreamHandler(sys.stdout)])
 	global is_bot_started
