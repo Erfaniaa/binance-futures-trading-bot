@@ -733,7 +733,7 @@ def set_position_mode(hedge_mode: bool) -> int:
 			return SUCCESSFUL
 		except:
 			pass
-	logging.error("ERROR/WARNING in set_position_mode (this may happen normally when position mode is unchanged)")
+	logging.warning("ERROR/WARNING in set_position_mode (this may happen normally when position mode is unchanged)")
 	return ERROR
 
 
