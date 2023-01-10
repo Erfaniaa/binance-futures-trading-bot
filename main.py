@@ -548,8 +548,11 @@ def close_all_open_positions_market_price() -> int:
 
 def init_bot() -> None:
 	global binance_futures_api
-	binance_futures_api = UMFutures(key=API_KEY, secret=SECRET_KEY)
-
+	
+	if IS_TESTNET:
+		binance_futures_api = UMFutures(key=API_KEY_PRODUCTION, secret=SECRET_KEY_PRODUCTION)
+	else:
+		binance_futures_api = UMFutures(key=API_KEY_TESTNET, secret=SECRET_KEY_TESTNET)
 
 def update_is_price_increasing(
 	price_direction_indicator_name_1: str, 
@@ -731,7 +734,7 @@ def set_position_mode(hedge_mode: bool) -> int:
 			else:
 				binance_futures_api.change_position_mode(dualSidePosition="false", timestamp=get_local_timestamp())
 			return SUCCESSFUL
-		except:
+		except:		
 			pass
 	logging.warning("ERROR/WARNING in set_position_mode (this may happen normally when position mode is unchanged)")
 	return ERROR
@@ -921,7 +924,7 @@ def main() -> None:
 	init_bot()
 	update_account_balance_and_unrealized_profit(FIRST_COIN_SYMBOL)
 	set_leverage(CONTRACT_SYMBOL, LEVERAGE)
-	set_position_mode(hedge_mode=True)
+	set_position_mode(HEDGE_MOODE)
 	while True:
 		sleep(SLEEP_INTERVAL)
 		update_current_time()
