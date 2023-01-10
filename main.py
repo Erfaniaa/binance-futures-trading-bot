@@ -734,7 +734,7 @@ def set_position_mode(hedge_mode: bool) -> int:
 			else:
 				binance_futures_api.change_position_mode(dualSidePosition="false", timestamp=get_local_timestamp())
 			return SUCCESSFUL
-		except:		
+		except:
 			pass
 	logging.warning("ERROR/WARNING in set_position_mode (this may happen normally when position mode is unchanged)")
 	return ERROR
