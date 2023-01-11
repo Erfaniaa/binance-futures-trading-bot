@@ -550,9 +550,9 @@ def init_bot() -> None:
 	global binance_futures_api
 	
 	if IS_TESTNET:
-		binance_futures_api = UMFutures(key=API_KEY_TESTNET, secret=SECRET_KEY_TESTNET)
+		binance_futures_api = UMFutures(key=API_KEY_TESTNET, secret=SECRET_KEY_TESTNET, base_url=URL_BASE_TESTNET)
 	else:
-		binance_futures_api = UMFutures(key=API_KEY_PRODUCTION, secret=SECRET_KEY_PRODUCTION)
+		binance_futures_api = UMFutures(key=API_KEY_PRODUCTION, secret=SECRET_KEY_PRODUCTION, base_url=URL_BASE_PRODUCTION)
 		
 def update_is_price_increasing(
 	price_direction_indicator_name_1: str, 
