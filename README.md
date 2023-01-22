@@ -56,7 +56,7 @@ To write custom bots you can:
 
 - [Crypto Trading Strategy Backtester](https://github.com/Erfaniaa/crypto-trading-strategy-backtester)
 - [Binance Spot Trading Bot](https://github.com/smzerehpoush/binance-spot-trading-bot)
-- [Finestel](https://finestel.com/): Our automated trading bot can be used on Finestel, a social trading website where users can copy the trades of successful traders to gain profits. By using Finestel in conjunction with our bot, users have the opportunity to increase their returns while learning from more experienced traders.
+- [Finestel](https://finestel.com/): Our automated trading bot can be used on Finestel & Finestel Pro: a crypto copy trading platform where pro traders & asset managers can connect their exchange accounts and manage their clients’ and communities of investors’ assets by using Finestel/Finestel Pro in conjunction with our Binance futures bot. Investors have the opportunity to profit the same as you while learning from more experienced traders.
 
 ## Credits
 
