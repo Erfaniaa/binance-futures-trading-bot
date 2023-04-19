@@ -67,16 +67,10 @@ def get_m1_candles(
 		current_time_range_start = min(current_time_range_start, end_timestamp)
 		current_time_range_end = max(current_time_range_end, start_timestamp)
 		current_time_range_end = min(current_time_range_end, end_timestamp)
-		current_time_range_m1_candles_list = None
-		for j in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
-			try:
-				current_time_range_m1_candles_list = binance_futures_api.klines(symbol=contract_symbol, interval="1m", startTime=current_time_range_start, endTime=current_time_range_end, limit=MAXIMUM_KLINE_CANDLES_PER_REQUEST)
-				break
-			except:
-				pass
-		if not current_time_range_m1_candles_list:
-			logging.error("ERROR in get_m1_candles")
-			return (ERROR, [])
+
+		klines = retry(MAXIMUM_NUMBER_OF_API_CALL_TRIES, lambda e: logging.error(f"ERROR in get_m1_candles: {e}" or (ERROR, [])))(binance_futures_api.klines)
+		current_time_range_m1_candles_list = klines(symbol=contract_symbol, interval="1m", startTime=current_time_range_start, endTime=current_time_range_end, limit=MAXIMUM_KLINE_CANDLES_PER_REQUEST)
+
 		for m1_candle in current_time_range_m1_candles_list:
 			all_m1_candles_list.append(Candle(datetime.fromtimestamp(m1_candle[0] // 1000),
 											  m1_candle[1],
@@ -104,16 +98,10 @@ def get_m15_candles(
 		current_time_range_start = min(current_time_range_start, end_timestamp)
 		current_time_range_end = max(current_time_range_end, start_timestamp)
 		current_time_range_end = min(current_time_range_end, end_timestamp)
-		current_time_range_m15_candles_list = None
-		for j in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
-			try:
-				current_time_range_m15_candles_list = binance_futures_api.klines(symbol=contract_symbol, interval="15m", startTime=current_time_range_start, endTime=current_time_range_end, limit=MAXIMUM_KLINE_CANDLES_PER_REQUEST)
-				break
-			except:
-				pass
-		if not current_time_range_m15_candles_list:
-			logging.error("ERROR in get_m15_candles")
-			return (ERROR, [])
+
+		klines = retry(MAXIMUM_NUMBER_OF_API_CALL_TRIES, lambda e: logging.error(f"ERROR in get_m15_candles: {e}" or (ERROR, [])))(binance_futures_api.klines)
+		current_time_range_m15_candles_list = klines(symbol=contract_symbol, interval="15m", startTime=current_time_range_start, endTime=current_time_range_end, limit=MAXIMUM_KLINE_CANDLES_PER_REQUEST)
+
 		for m15_candle in current_time_range_m15_candles_list:
 			all_m15_candles_list.append(Candle(datetime.fromtimestamp(m15_candle[0] // 1000),
 											   m15_candle[1],
@@ -141,16 +129,10 @@ def get_h1_candles(
 		current_time_range_start = min(current_time_range_start, end_timestamp)
 		current_time_range_end = max(current_time_range_end, start_timestamp)
 		current_time_range_end = min(current_time_range_end, end_timestamp)
-		current_time_range_h1_candles_list = None
-		for j in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
-			try:
-				current_time_range_h1_candles_list = binance_futures_api.klines(symbol=contract_symbol, interval="1h", startTime=current_time_range_start, endTime=current_time_range_end, limit=MAXIMUM_KLINE_CANDLES_PER_REQUEST)
-				break
-			except:
-				pass
-		if not current_time_range_h1_candles_list:
-			logging.error("ERROR in get_h1_candles")
-			return (ERROR, [])
+
+		klines = retry(MAXIMUM_NUMBER_OF_API_CALL_TRIES, lambda e: logging.error(f"ERROR in get_h1_candles: {e}" or (ERROR, [])))(binance_futures_api.klines)
+		current_time_range_h1_candles_list = klines(symbol=contract_symbol, interval="1h", startTime=current_time_range_start, endTime=current_time_range_end, limit=MAXIMUM_KLINE_CANDLES_PER_REQUEST)
+
 		for h1_candle in current_time_range_h1_candles_list:
 			all_h1_candles_list.append(Candle(datetime.fromtimestamp(h1_candle[0] // 1000),
 											  h1_candle[1],
@@ -178,16 +160,10 @@ def get_h2_candles(
 		current_time_range_start = min(current_time_range_start, end_timestamp)
 		current_time_range_end = max(current_time_range_end, start_timestamp)
 		current_time_range_end = min(current_time_range_end, end_timestamp)
-		current_time_range_h2_candles_list = None
-		for j in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
-			try:
-				current_time_range_h2_candles_list = binance_futures_api.klines(symbol=contract_symbol, interval="2h", startTime=current_time_range_start, endTime=current_time_range_end, limit=MAXIMUM_KLINE_CANDLES_PER_REQUEST)
-				break
-			except:
-				pass
-		if not current_time_range_h2_candles_list:
-			logging.error("ERROR in get_h2_candles")
-			return (ERROR, [])
+
+		klines = retry(MAXIMUM_NUMBER_OF_API_CALL_TRIES, lambda e: logging.error(f"ERROR in get_h2_candles: {e}" or (ERROR, [])))(binance_futures_api.klines)
+		current_time_range_h2_candles_list = klines(symbol=contract_symbol, interval="2h", startTime=current_time_range_start, endTime=current_time_range_end, limit=MAXIMUM_KLINE_CANDLES_PER_REQUEST)
+
 		for h2_candle in current_time_range_h2_candles_list:
 			all_h2_candles_list.append(Candle(datetime.fromtimestamp(h2_candle[0] // 1000),
 									   h2_candle[1],
@@ -215,16 +191,10 @@ def get_h4_candles(
 		current_time_range_start = min(current_time_range_start, end_timestamp)
 		current_time_range_end = max(current_time_range_end, start_timestamp)
 		current_time_range_end = min(current_time_range_end, end_timestamp)
-		current_time_range_h4_candles_list = None
-		for j in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
-			try:
-				current_time_range_h4_candles_list = binance_futures_api.klines(symbol=contract_symbol, interval="4h", startTime=current_time_range_start, endTime=current_time_range_end, limit=MAXIMUM_KLINE_CANDLES_PER_REQUEST)
-				break
-			except:
-				pass
-		if not current_time_range_h4_candles_list:
-			logging.error("ERROR in get_h4_candles")
-			return (ERROR, [])
+
+		klines = retry(MAXIMUM_NUMBER_OF_API_CALL_TRIES, lambda e: logging.error(f"ERROR in get_h4_candles: {e}" or (ERROR, [])))(binance_futures_api.klines)
+		current_time_range_h4_candles_list = klines(symbol=contract_symbol, interval="4h", startTime=current_time_range_start, endTime=current_time_range_end, limit=MAXIMUM_KLINE_CANDLES_PER_REQUEST)
+
 		for h4_candle in current_time_range_h4_candles_list:
 			all_h4_candles_list.append(Candle(datetime.fromtimestamp(h4_candle[0] // 1000),
 											  h4_candle[1],
@@ -252,16 +222,10 @@ def get_d1_candles(
 		current_time_range_start = min(current_time_range_start, end_timestamp)
 		current_time_range_end = max(current_time_range_end, start_timestamp)
 		current_time_range_end = min(current_time_range_end, end_timestamp)
-		current_time_range_d1_candles_list = None
-		for j in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
-			try:
-				current_time_range_d1_candles_list = binance_futures_api.klines(symbol=contract_symbol, interval="1d", startTime=current_time_range_start, endTime=current_time_range_end, limit=MAXIMUM_KLINE_CANDLES_PER_REQUEST)
-				break
-			except:
-				pass
-		if not current_time_range_d1_candles_list:
-			logging.error("ERROR in get_d1_candles")
-			return (ERROR, [])
+
+		klines = retry(MAXIMUM_NUMBER_OF_API_CALL_TRIES, lambda e: logging.error(f"ERROR in get_d1_candles: {e}" or (ERROR, [])))(binance_futures_api.klines)
+		current_time_range_d1_candles_list = klines(symbol=contract_symbol, interval="1d", startTime=current_time_range_start, endTime=current_time_range_end, limit=MAXIMUM_KLINE_CANDLES_PER_REQUEST)
+
 		for d1_candle in current_time_range_d1_candles_list:
 			all_d1_candles_list.append(Candle(datetime.fromtimestamp(d1_candle[0] // 1000),
 											  d1_candle[1],
