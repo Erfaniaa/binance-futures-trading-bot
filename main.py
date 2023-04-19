@@ -29,18 +29,13 @@ last_account_available_balances_list = []
 last_total_account_balances_list = []
 
 
+@retry(MAXIMUM_NUMBER_OF_API_CALL_TRIES, lambda e: logging.error(f"ERROR in update_current_time: {e}") or ERROR)
 def update_current_time() -> int:
 	global current_time
 	global last_time
-	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
-		try:
-			last_time = current_time
-			current_time = datetime.fromtimestamp(binance_futures_api.time()["serverTime"] / 1000)
-			return SUCCESSFUL
-		except:
-			pass
-	logging.error("ERROR in update_current_time")
-	return ERROR
+	last_time = current_time
+	current_time = datetime.fromtimestamp(binance_futures_api.time()["serverTime"] / 1000)
+	return SUCCESSFUL
 
 
 def get_local_timestamp() -> int:
@@ -72,16 +67,10 @@ def get_m1_candles(
 		current_time_range_start = min(current_time_range_start, end_timestamp)
 		current_time_range_end = max(current_time_range_end, start_timestamp)
 		current_time_range_end = min(current_time_range_end, end_timestamp)
-		current_time_range_m1_candles_list = None
-		for j in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
-			try:
-				current_time_range_m1_candles_list = binance_futures_api.klines(symbol=contract_symbol, interval="1m", startTime=current_time_range_start, endTime=current_time_range_end, limit=MAXIMUM_KLINE_CANDLES_PER_REQUEST)
-				break
-			except:
-				pass
-		if not current_time_range_m1_candles_list:
-			logging.error("ERROR in get_m1_candles")
-			return (ERROR, [])
+
+		klines = retry(MAXIMUM_NUMBER_OF_API_CALL_TRIES, lambda e: logging.error(f"ERROR in get_m1_candles: {e}" or (ERROR, [])))(binance_futures_api.klines)
+		current_time_range_m1_candles_list = klines(symbol=contract_symbol, interval="1m", startTime=current_time_range_start, endTime=current_time_range_end, limit=MAXIMUM_KLINE_CANDLES_PER_REQUEST)
+
 		for m1_candle in current_time_range_m1_candles_list:
 			all_m1_candles_list.append(Candle(datetime.fromtimestamp(m1_candle[0] // 1000),
 											  m1_candle[1],
@@ -109,16 +98,10 @@ def get_m15_candles(
 		current_time_range_start = min(current_time_range_start, end_timestamp)
 		current_time_range_end = max(current_time_range_end, start_timestamp)
 		current_time_range_end = min(current_time_range_end, end_timestamp)
-		current_time_range_m15_candles_list = None
-		for j in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
-			try:
-				current_time_range_m15_candles_list = binance_futures_api.klines(symbol=contract_symbol, interval="15m", startTime=current_time_range_start, endTime=current_time_range_end, limit=MAXIMUM_KLINE_CANDLES_PER_REQUEST)
-				break
-			except:
-				pass
-		if not current_time_range_m15_candles_list:
-			logging.error("ERROR in get_m15_candles")
-			return (ERROR, [])
+
+		klines = retry(MAXIMUM_NUMBER_OF_API_CALL_TRIES, lambda e: logging.error(f"ERROR in get_m15_candles: {e}" or (ERROR, [])))(binance_futures_api.klines)
+		current_time_range_m15_candles_list = klines(symbol=contract_symbol, interval="15m", startTime=current_time_range_start, endTime=current_time_range_end, limit=MAXIMUM_KLINE_CANDLES_PER_REQUEST)
+
 		for m15_candle in current_time_range_m15_candles_list:
 			all_m15_candles_list.append(Candle(datetime.fromtimestamp(m15_candle[0] // 1000),
 											   m15_candle[1],
@@ -146,16 +129,10 @@ def get_h1_candles(
 		current_time_range_start = min(current_time_range_start, end_timestamp)
 		current_time_range_end = max(current_time_range_end, start_timestamp)
 		current_time_range_end = min(current_time_range_end, end_timestamp)
-		current_time_range_h1_candles_list = None
-		for j in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
-			try:
-				current_time_range_h1_candles_list = binance_futures_api.klines(symbol=contract_symbol, interval="1h", startTime=current_time_range_start, endTime=current_time_range_end, limit=MAXIMUM_KLINE_CANDLES_PER_REQUEST)
-				break
-			except:
-				pass
-		if not current_time_range_h1_candles_list:
-			logging.error("ERROR in get_h1_candles")
-			return (ERROR, [])
+
+		klines = retry(MAXIMUM_NUMBER_OF_API_CALL_TRIES, lambda e: logging.error(f"ERROR in get_h1_candles: {e}" or (ERROR, [])))(binance_futures_api.klines)
+		current_time_range_h1_candles_list = klines(symbol=contract_symbol, interval="1h", startTime=current_time_range_start, endTime=current_time_range_end, limit=MAXIMUM_KLINE_CANDLES_PER_REQUEST)
+
 		for h1_candle in current_time_range_h1_candles_list:
 			all_h1_candles_list.append(Candle(datetime.fromtimestamp(h1_candle[0] // 1000),
 											  h1_candle[1],
@@ -183,16 +160,10 @@ def get_h2_candles(
 		current_time_range_start = min(current_time_range_start, end_timestamp)
 		current_time_range_end = max(current_time_range_end, start_timestamp)
 		current_time_range_end = min(current_time_range_end, end_timestamp)
-		current_time_range_h2_candles_list = None
-		for j in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
-			try:
-				current_time_range_h2_candles_list = binance_futures_api.klines(symbol=contract_symbol, interval="2h", startTime=current_time_range_start, endTime=current_time_range_end, limit=MAXIMUM_KLINE_CANDLES_PER_REQUEST)
-				break
-			except:
-				pass
-		if not current_time_range_h2_candles_list:
-			logging.error("ERROR in get_h2_candles")
-			return (ERROR, [])
+
+		klines = retry(MAXIMUM_NUMBER_OF_API_CALL_TRIES, lambda e: logging.error(f"ERROR in get_h2_candles: {e}" or (ERROR, [])))(binance_futures_api.klines)
+		current_time_range_h2_candles_list = klines(symbol=contract_symbol, interval="2h", startTime=current_time_range_start, endTime=current_time_range_end, limit=MAXIMUM_KLINE_CANDLES_PER_REQUEST)
+
 		for h2_candle in current_time_range_h2_candles_list:
 			all_h2_candles_list.append(Candle(datetime.fromtimestamp(h2_candle[0] // 1000),
 									   h2_candle[1],
@@ -220,16 +191,10 @@ def get_h4_candles(
 		current_time_range_start = min(current_time_range_start, end_timestamp)
 		current_time_range_end = max(current_time_range_end, start_timestamp)
 		current_time_range_end = min(current_time_range_end, end_timestamp)
-		current_time_range_h4_candles_list = None
-		for j in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
-			try:
-				current_time_range_h4_candles_list = binance_futures_api.klines(symbol=contract_symbol, interval="4h", startTime=current_time_range_start, endTime=current_time_range_end, limit=MAXIMUM_KLINE_CANDLES_PER_REQUEST)
-				break
-			except:
-				pass
-		if not current_time_range_h4_candles_list:
-			logging.error("ERROR in get_h4_candles")
-			return (ERROR, [])
+
+		klines = retry(MAXIMUM_NUMBER_OF_API_CALL_TRIES, lambda e: logging.error(f"ERROR in get_h4_candles: {e}" or (ERROR, [])))(binance_futures_api.klines)
+		current_time_range_h4_candles_list = klines(symbol=contract_symbol, interval="4h", startTime=current_time_range_start, endTime=current_time_range_end, limit=MAXIMUM_KLINE_CANDLES_PER_REQUEST)
+
 		for h4_candle in current_time_range_h4_candles_list:
 			all_h4_candles_list.append(Candle(datetime.fromtimestamp(h4_candle[0] // 1000),
 											  h4_candle[1],
@@ -257,16 +222,10 @@ def get_d1_candles(
 		current_time_range_start = min(current_time_range_start, end_timestamp)
 		current_time_range_end = max(current_time_range_end, start_timestamp)
 		current_time_range_end = min(current_time_range_end, end_timestamp)
-		current_time_range_d1_candles_list = None
-		for j in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
-			try:
-				current_time_range_d1_candles_list = binance_futures_api.klines(symbol=contract_symbol, interval="1d", startTime=current_time_range_start, endTime=current_time_range_end, limit=MAXIMUM_KLINE_CANDLES_PER_REQUEST)
-				break
-			except:
-				pass
-		if not current_time_range_d1_candles_list:
-			logging.error("ERROR in get_d1_candles")
-			return (ERROR, [])
+
+		klines = retry(MAXIMUM_NUMBER_OF_API_CALL_TRIES, lambda e: logging.error(f"ERROR in get_d1_candles: {e}" or (ERROR, [])))(binance_futures_api.klines)
+		current_time_range_d1_candles_list = klines(symbol=contract_symbol, interval="1d", startTime=current_time_range_start, endTime=current_time_range_end, limit=MAXIMUM_KLINE_CANDLES_PER_REQUEST)
+
 		for d1_candle in current_time_range_d1_candles_list:
 			all_d1_candles_list.append(Candle(datetime.fromtimestamp(d1_candle[0] // 1000),
 											  d1_candle[1],
@@ -500,50 +459,40 @@ def update_account_balance_and_unrealized_profit(first_coin_symbol: str) -> int:
 	return ERROR
 
 
+@retry(MAXIMUM_NUMBER_OF_API_CALL_TRIES, lambda e: logging.error(f"ERROR in update_contract_last_price: {e}") or ERROR)
 def update_contract_last_price(contract_symbol: str) -> int:
 	global contract_last_price
-	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
-		try:
-			contract_last_price = float(binance_futures_api.ticker_price(symbol=contract_symbol)["price"])
-			return SUCCESSFUL
-		except:
-			pass
-	logging.error("ERROR in update_contract_last_price")
-	return ERROR
+	contract_last_price = float(binance_futures_api.ticker_price(symbol=contract_symbol)["price"])
+	return SUCCESSFUL
 
 
+@retry(MAXIMUM_NUMBER_OF_API_CALL_TRIES, lambda e: logging.error(f"ERROR in close_all_open_positions_market_price: {e}") or ERROR)
 def close_all_open_positions_market_price() -> int:
-	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
-		try:
-			all_open_positions = binance_futures_api.get_position_risk(timestamp=get_local_timestamp())
-			for position in all_open_positions:
-				position_quantity = float(position["positionAmt"])
-				if position_quantity == 0.0:
-					continue
-				elif position_quantity > 0.0:
-					binance_futures_api.new_order(symbol=position["symbol"],
-												  side="SELL",
-												  quantity=abs(position_quantity),
-												  type="MARKET",
-												  newClientOrderId=NEW_CLIENT_ORDER_ID_PREFIX + str(
-													  get_local_timestamp())[-10:],
-												  timestamp=get_local_timestamp())
-					send_new_order_message(position["symbol"], "SELL", abs(position_quantity))
-				elif position_quantity < 0.0:
-					binance_futures_api.new_order(symbol=position["symbol"],
-												  side="BUY",
-												  quantity=abs(position_quantity),
-												  type="MARKET",
-												  newClientOrderId=NEW_CLIENT_ORDER_ID_PREFIX + str(
-													  get_local_timestamp())[-10:],
-												  timestamp=get_local_timestamp())
-					send_new_order_message(position["symbol"], "BUY", abs(position_quantity))
+	all_open_positions = binance_futures_api.get_position_risk(timestamp=get_local_timestamp())
+	for position in all_open_positions:
+		position_quantity = float(position["positionAmt"])
+		if position_quantity == 0.0:
+			continue
+		elif position_quantity > 0.0:
+			binance_futures_api.new_order(symbol=position["symbol"],
+										  side="SELL",
+										  quantity=abs(position_quantity),
+										  type="MARKET",
+										  newClientOrderId=NEW_CLIENT_ORDER_ID_PREFIX + str(
+											  get_local_timestamp())[-10:],
+										  timestamp=get_local_timestamp())
+			send_new_order_message(position["symbol"], "SELL", abs(position_quantity))
+		elif position_quantity < 0.0:
+			binance_futures_api.new_order(symbol=position["symbol"],
+										  side="BUY",
+										  quantity=abs(position_quantity),
+										  type="MARKET",
+										  newClientOrderId=NEW_CLIENT_ORDER_ID_PREFIX + str(
+											  get_local_timestamp())[-10:],
+										  timestamp=get_local_timestamp())
+			send_new_order_message(position["symbol"], "BUY", abs(position_quantity))
 
-			return SUCCESSFUL
-		except:
-			pass
-	logging.error("ERROR in close_all_open_positions_market_price")
-	return ERROR
+	return SUCCESSFUL
 
 
 def init_bot() -> None:
@@ -612,61 +561,48 @@ def update_is_macd_negative() -> None:
 	is_macd_negative = indicators_dict["macd_line"] < 0
 
 
+@retry(MAXIMUM_NUMBER_OF_API_CALL_TRIES, lambda e: logging.error(f"ERROR in is_take_profit_unexecuted: {e}") or (ERROR, False))
 def is_take_profit_unexecuted(contract_symbol: str, strategy_id: int) -> tuple:
-	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
-		try:
-			order_id = orders_dict.get("strategy" + str(strategy_id) + "_last_take_profit_order_id", -1)
-			if int(order_id) == -1:
-				return (SUCCESSFUL, False)
-			order = binance_futures_api.query_order(symbol=contract_symbol, orderId=order_id, timestamp=get_local_timestamp())
-			if order["status"] == "FILLED" or order["status"] == "EXPIRED" or order["status"] == "CANCELED":
-				return (SUCCESSFUL, False)
-			else:
-				return (SUCCESSFUL, True)
-		except:
-			pass
-	logging.error("ERROR in is_take_profit_unexecuted")
-	return (ERROR, False)
+	order_id = orders_dict.get("strategy" + str(strategy_id) + "_last_take_profit_order_id", -1)
+	if int(order_id) == -1:
+		return (SUCCESSFUL, False)
+	order = binance_futures_api.query_order(symbol=contract_symbol, orderId=order_id, timestamp=get_local_timestamp())
+	if order["status"] == "FILLED" or order["status"] == "EXPIRED" or order["status"] == "CANCELED":
+		return (SUCCESSFUL, False)
+	else:
+		return (SUCCESSFUL, True)
 
 
+@retry(MAXIMUM_NUMBER_OF_API_CALL_TRIES, lambda e: logging.error(f"ERROR in is_stop_loss_unexecuted: {e}") or (ERROR, False))
 def is_stop_loss_unexecuted(contract_symbol: str, strategy_id: int) -> tuple:
-	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
-		try:
-			order_id = orders_dict.get("strategy" + str(strategy_id) + "_last_stop_loss_order_id", -1)
-			if int(order_id) == -1:
-				return (SUCCESSFUL, False)
-			order = binance_futures_api.query_order(symbol=contract_symbol, orderId=order_id, timestamp=get_local_timestamp())
-			if order["status"] == "FILLED" or order["status"] == "EXPIRED" or order["status"] == "CANCELED":
-				return (SUCCESSFUL, False)
-			else:
-				return (SUCCESSFUL, True)
-		except:
-			pass
-	logging.error("ERROR in is_stop_loss_unexecuted")
-	return (ERROR, False)
+	order_id = orders_dict.get("strategy" + str(strategy_id) + "_last_stop_loss_order_id", -1)
+	if int(order_id) == -1:
+		return (SUCCESSFUL, False)
+	order = binance_futures_api.query_order(symbol=contract_symbol, orderId=order_id, timestamp=get_local_timestamp())
+	if order["status"] == "FILLED" or order["status"] == "EXPIRED" or order["status"] == "CANCELED":
+		return (SUCCESSFUL, False)
+	else:
+		return (SUCCESSFUL, True)
 
 
 def is_position_active(contract_symbol: str, strategy_id: int) -> bool:
 	return is_take_profit_unexecuted(contract_symbol, strategy_id)[1] and is_stop_loss_unexecuted(contract_symbol, strategy_id)[1]
 
 
+@retry(MAXIMUM_NUMBER_OF_API_CALL_TRIES, lambda e: logging.error(f"ERROR in cancel_extra_open_order: {e}") or ERROR)
 def cancel_extra_open_order(contract_symbol: str, strategy_id: int) -> int:
-	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
-		try:
-			order_id = None
-			if is_take_profit_unexecuted(contract_symbol, strategy_id)[1] and not is_stop_loss_unexecuted(contract_symbol, strategy_id)[1]:
-				order_id = orders_dict["strategy" + str(strategy_id) + "_last_take_profit_order_id"]
-			elif not is_take_profit_unexecuted(contract_symbol, strategy_id)[1] and is_stop_loss_unexecuted(contract_symbol, strategy_id)[1]:
-				order_id = orders_dict["strategy" + str(strategy_id) + "_last_stop_loss_order_id"]
+	order_id = None
+	if is_take_profit_unexecuted(contract_symbol, strategy_id)[1] and not \
+	is_stop_loss_unexecuted(contract_symbol, strategy_id)[1]:
+		order_id = orders_dict["strategy" + str(strategy_id) + "_last_take_profit_order_id"]
+	elif not is_take_profit_unexecuted(contract_symbol, strategy_id)[1] and \
+			is_stop_loss_unexecuted(contract_symbol, strategy_id)[1]:
+		order_id = orders_dict["strategy" + str(strategy_id) + "_last_stop_loss_order_id"]
 
-			if order_id is not None:
-				binance_futures_api.cancel_order(symbol=contract_symbol, orderId=order_id, timestamp=get_local_timestamp())
-				send_cancel_order_message(order_id)
-			return SUCCESSFUL
-		except:
-			pass
-	logging.error("ERROR in cancel_extra_open_order")
-	return ERROR
+	if order_id is not None:
+		binance_futures_api.cancel_order(symbol=contract_symbol, orderId=order_id, timestamp=get_local_timestamp())
+		send_cancel_order_message(order_id)
+	return SUCCESSFUL
 
 
 def is_it_time_to_open_long_position(strategy_id: int, current_time: datetime) -> bool:
@@ -703,41 +639,23 @@ def is_it_time_to_cancel_extra_open_orders(current_time: datetime) -> bool:
 		current_time.second) % 60 <= HANDLING_POSITIONS_TIME_SECOND + 1
 
 
+@retry(MAXIMUM_NUMBER_OF_API_CALL_TRIES, lambda e: logging.error(f"ERROR in cancel_symbol_open_orders: {e}") or ERROR)
 def cancel_symbol_open_orders(contract_symbol: str) -> int:
-	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
-		try:
-			binance_futures_api.cancel_open_orders(symbol=contract_symbol)
-			send_cancel_open_orders_for_symbol_message(contract_symbol)
-			return SUCCESSFUL
-		except:
-			pass
-	logging.error("ERROR in cancel_symbol_open_orders")
-	return ERROR
+	binance_futures_api.cancel_open_orders(symbol=contract_symbol)
+	send_cancel_open_orders_for_symbol_message(contract_symbol)
+	return SUCCESSFUL
 
 
+@retry(MAXIMUM_NUMBER_OF_API_CALL_TRIES, lambda e: logging.error(f"ERROR in set_leverage: {e}") or ERROR)
 def set_leverage(contract_symbol: str, leverage: int) -> int:
-	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
-		try:
-			binance_futures_api.change_leverage(symbol=contract_symbol, leverage=leverage, timestamp=get_local_timestamp())
-			return SUCCESSFUL
-		except:
-			pass
-	logging.error("ERROR in set_leverage")
-	return ERROR
+	binance_futures_api.change_leverage(symbol=contract_symbol, leverage=leverage, timestamp=get_local_timestamp())
+	return SUCCESSFUL
 
 
+@retry(MAXIMUM_NUMBER_OF_API_CALL_TRIES, lambda e: logging.warning(f"ERROR/WARNING in set_position_mode (this may happen normally when position mode is unchanged): {e}") or ERROR)
 def set_position_mode(hedge_mode: bool) -> int:
-	for i in range(MAXIMUM_NUMBER_OF_API_CALL_TRIES):
-		try:
-			if hedge_mode:
-				binance_futures_api.change_position_mode(dualSidePosition="true", timestamp=get_local_timestamp())
-			else:
-				binance_futures_api.change_position_mode(dualSidePosition="false", timestamp=get_local_timestamp())
-			return SUCCESSFUL
-		except:
-			pass
-	logging.warning("ERROR/WARNING in set_position_mode (this may happen normally when position mode is unchanged)")
-	return ERROR
+	binance_futures_api.change_position_mode(dualSidePosition="true" if hedge_mode else "false", timestamp=get_local_timestamp())
+	return SUCCESSFUL
 
 
 def open_long_position(
