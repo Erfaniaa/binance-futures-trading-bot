@@ -13,6 +13,6 @@ def retry(max_retries, on_fail):
 				except Exception as e:
 					exceptions.add(str(e))
 					so_far += 1
-			return on_fail('\n========'.join(exceptions))
+			return on_fail('\n'.join(exceptions))
 		return inner
 	return wrapper
