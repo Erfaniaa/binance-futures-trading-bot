@@ -842,7 +842,7 @@ def main() -> None:
 	init_bot()
 	update_account_balance_and_unrealized_profit(FIRST_COIN_SYMBOL)
 	set_leverage(CONTRACT_SYMBOL, LEVERAGE)
-	set_position_mode(HEDGE_MOODE)
+	set_position_mode(HEDGE_MODE)
 	while True:
 		sleep(SLEEP_INTERVAL)
 		update_current_time()
