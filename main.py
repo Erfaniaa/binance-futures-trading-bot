@@ -660,9 +660,9 @@ def set_position_mode(hedge_mode: bool) -> int:
 
 def open_long_position(
 	contract_symbol: str,
-	first_coin_amount: int,
-	take_profit_percent: int, 
-	stop_loss_percent: int,
+	first_coin_amount: float,
+	take_profit_percent: float, 
+	stop_loss_percent: float,
 	strategy_id: int
 ) -> int:
 	logging.info("=" * 60)
@@ -745,9 +745,9 @@ def open_long_position(
 
 def open_short_position(
 	contract_symbol: str, 
-	first_coin_amount: int, 
-	take_profit_percent: int, 
-	stop_loss_percent: int, 
+	first_coin_amount: float, 
+	take_profit_percent: float, 
+	stop_loss_percent: float, 
 	strategy_id: int
 ) -> int:
 	logging.info("=" * 60)
