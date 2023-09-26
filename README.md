@@ -8,7 +8,7 @@ Easy-to-use multi-strategic automatic trading for Binance Futures with Telegram 
 - You can run it fast and it's easy to use.
 - This project can handle multiple strategies at the same time.
 - There are no complexities and no database usage in this project. Even dependencies are a few.
-- It's easy for modifying and customization.
+- It's easy to modify and customize.
 - It automatically stores recent candles that can be used for machine learning model input.
 - You can read the code for educational purposes.
 - You can be notified with Telegram messages
@@ -50,13 +50,14 @@ To write custom bots you can:
 - Import modules, not variables.
 - Use classes and make `main.py` smaller.
 - Add more indicators to `indicators.py`.
-- Find a better way for handling error codes.
+- Find a better way to handle error codes.
+- Unify get candles functions
 
 ## See Also
 
 - [Crypto Trading Strategy Backtester](https://github.com/Erfaniaa/crypto-trading-strategy-backtester)
 - [Binance Spot Trading Bot](https://github.com/smzerehpoush/binance-spot-trading-bot)
-- <a href="https://finestel.com/" target=“_blank”>Finestel</a>: Our automated trading bot can be used on Finestel & Finestel Pro: a crypto copy trading platform where pro traders & asset managers can connect their exchange accounts and manage their clients’ and communities of investors’ assets by using Finestel/Finestel Pro in conjunction with our Binance futures bot. Investors have the opportunity to profit the same as you while learning from more experienced traders.
+- <a href="https://finestel.com/" target=“_blank”>Finestel</a>: Our automated trading bot can be used on Finestel & Finestel Pro: a crypto copy trading platform where pro traders & asset managers can connect their exchange accounts and manage their clients and communities of investors’ assets by using Finestel/Finestel Pro in conjunction with our Binance futures bot. Investors have the opportunity to profit the same as you while learning from more experienced traders.
 
 ## Credits
 
