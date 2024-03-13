@@ -51,7 +51,7 @@ To write custom bots you can:
 - Use classes and make `main.py` smaller.
 - Add more indicators to `indicators.py`.
 - Find a better way to handle error codes.
-- Unify get candles functions
+- Unify get candles functions.
 
 ## See Also
 
